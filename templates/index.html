@@ -1,0 +1,2350 @@
+{% load static %}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --bg:#f4f7fb; --card:#fff; --accent:#2563eb; --danger:#ef4444; --muted:#64748b;
+    }
+    body{margin:0;font-family:Inter,Arial;background:var(--bg);color:#0f1724}
+    header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#0f1724;color:#fff}
+    .layout{display:flex;height:calc(100vh - 56px)}
+    .sidebar{width:220px;background:#111827;color:#fff;padding:12px;overflow:auto}
+    .sidebar h3{margin-top:0}
+    .sidebar button{display:block;width:100%;text-align:left;padding:8px;border-radius:6px;border:none;background:transparent;color:#fff;margin-bottom:6px;cursor:pointer}
+    .sidebar button.active{background:rgba(255,255,255,0.04)}
+    .main{flex:1;padding:16px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+    .top-stats{display:flex;gap:10px;flex-wrap:wrap}
+    .stat{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 4px 12px rgba(2,6,23,0.06);min-width:120px;text-align:center}
+    .three{display:flex;gap:12px}
+    .box{background:var(--card);flex:1;padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.06);min-height:300px;overflow:auto}
+    .box h4{margin:0 0 8px 0}
+    .small-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .small-stat{background:#f8fafc;padding:8px;border-radius:8px;min-width:110px;text-align:center}
+    .status-row{display:flex;gap:12px;align-items:center;background:var(--card);padding:12px;border-radius:10px;box-shadow:0 4px 12px rgba(2,6,23,0.06)}
+    .chart-wrap{width:220px;height:220px;position:relative}
+    .center-pct{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font-weight:700}
+    /* chat (1/4 width) */
+    .chat{width:25%;background:var(--card);border-left:1px solid #e6eef8;display:flex;flex-direction:column}
+    .chat .header{padding:12px;border-bottom:1px solid #eef2f7}
+    .chat .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+    .bubble{max-width:75%;padding:10px;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.05)}
+    .bubble.me{margin-left:auto;background:linear-gradient(135deg,#2b6cb0,#2563eb);color:#fff;border-bottom-right-radius:4px}
+    .bubble.other{margin-right:auto;background:#fff;border:1px solid #eef2f7}
+    .meta{font-size:11px;color:var(--muted);margin-top:6px;display:block}
+    .chat-form{display:flex;gap:8px;padding:10px;border-top:1px solid #eef2f7}
+    .chat-form input[type="text"]{flex:1;padding:10px;border-radius:8px;border:1px solid #e6eef8}
+    .chat-form label{padding:8px;border-radius:8px;background:#f1f5f9;border:1px solid #e6eef8;cursor:pointer}
+    .chat-form button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    /* modal */
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.5)}
+    .modal .card{background:#fff;padding:16px;border-radius:8px;width:640px;max-height:80vh;overflow:auto}
+    .btn{background:var(--accent);color:#fff;padding:8px 10px;border-radius:6px;border:none;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--accent);border:1px solid #cfe0ff}
+    .muted{color:var(--muted)}
+<!--       .custom-modal {-->
+<!--      display: none;-->
+<!--      position: fixed;-->
+<!--      z-index: 1000;-->
+<!--      left: 0;-->
+<!--      top: 0;-->
+<!--      width: 100%;-->
+<!--      height: 100%;-->
+<!--      overflow: auto;-->
+<!--      background-color: rgba(0, 0, 0, 0.5);-->
+<!--    }-->
+
+<!--    /* Modal oynasi */-->
+<!--    .custom-modal-content {-->
+<!--      background-color: #fff;-->
+<!--      margin: 10% auto;-->
+<!--      padding: 20px;-->
+<!--      border-radius: 5px;-->
+<!--      width: 90%;-->
+<!--      max-width: 500px;-->
+<!--      position: relative;-->
+<!--      animation: fadeIn 0.3s ease-in-out;-->
+<!--    }-->
+
+<!--    /* Yopish tugmasi */-->
+<!--    .custom-modal-close {-->
+<!--      color: #aaa;-->
+<!--      position: absolute;-->
+<!--      right: 15px;-->
+<!--      top: 10px;-->
+<!--      font-size: 28px;-->
+<!--      font-weight: bold;-->
+<!--      cursor: pointer;-->
+<!--    }-->
+
+<!--    .custom-modal-close:hover {-->
+<!--      color: #000;-->
+<!--    }-->
+
+<!--    @keyframes fadeIn {-->
+<!--      from { opacity: 0; transform: scale(0.9); }-->
+<!--      to { opacity: 1; transform: scale(1); }-->
+<!--    }-->
+
+    /* Oddiy tugma */
+    .custom-btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .custom-btn:hover {
+      background-color: #0056b3;
+    }
+
+
+/* ================= MODAL FONI ================= */
+
+.custom-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.85);
+    backdrop-filter:blur(8px);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    animation:fadeIn .25s ease;
+}
+
+/* ================= MODAL OYNASI ================= */
+
+.custom-modal-content{
+
+    width:700px;
+    height: 900px;
+    max-height:98%;
+    background:#1e293b;
+    color:#f8fafc;
+    border:1px solid #334155;
+    padding:5px;
+    overflow-y:auto;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.6),
+        0 0 0 1px rgba(59,130,246,.08);
+
+    animation:modalOpen .25s ease;
+}
+
+/* Scroll */
+
+.custom-modal-content::-webkit-scrollbar{
+    width:8px;
+}
+
+.custom-modal-content::-webkit-scrollbar-thumb{
+    background:#475569;
+}
+
+.custom-modal-content::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+
+/* ================= SARLAVHA ================= */
+
+.custom-modal-content h2{
+
+    margin:10 0 10px;
+    color:white;
+    text-align:center;
+    font-size:24px;
+    padding-bottom:15px;
+
+}
+
+/* ================= MATN ================= */
+
+.custom-modal-content p{
+    color:#cbd5e1;
+    margin:6px 0;
+
+}
+
+/* ================= CLOSE ================= */
+
+.custom-modal-close{
+
+    float:right;
+    font-size:32px;
+    color:#94a3b8;
+    cursor:pointer;
+    transition:.25s;
+
+}
+
+.custom-modal-close:hover{
+
+    color:#ef4444;
+    transform:rotate(90deg);
+
+}
+
+/* ================= KARTALAR ================= */
+
+.custom-modal-content > div > div{
+
+    background:#0f172a;
+    padding:18px;
+    margin-bottom:5px;
+    transition:.25s;
+
+}
+
+.custom-modal-content > div > div:hover{
+
+    border-color:#2563eb;
+
+    background:#172554;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+
+}
+
+/* ================= strong ================= */
+
+.custom-modal-content strong{
+
+    color:#ffffff;
+
+    font-weight:600;
+
+}
+
+/* ================= muted ================= */
+
+.muted{
+
+    color:#94a3b8;
+
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes modalOpen{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-30px) scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+<!--@keyframes fadeIn{-->
+
+<!--    from{-->
+
+<!--        opacity:0;-->
+
+<!--    }-->
+
+<!--    to{-->
+
+<!--        opacity:1;-->
+
+<!--    }-->
+
+<!--}-->
+
+
+.message-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  width: auto;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 10px 20px;
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  10% { opacity: 1; transform: translate(-50%, -50%); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -40%); }
+}
+
+
+.led{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    display:inline-block;
+    margin:0 2px;
+    background:#ffd400;
+    box-shadow:0 0 2px #ffd400;
+    animation:routerLed 1s infinite;
+}
+
+.led1{animation-delay:0s;}
+.led2{animation-delay:.15s;}
+.led3{animation-delay:.30s;}
+
+@keyframes routerLed{
+    0%,100%{
+        opacity:.15;
+        box-shadow:0 0 1px #ffd400;
+    }
+    50%{
+        opacity:1;
+        box-shadow:
+            0 0 5px #ffd400,
+            0 0 10px #ffd400,
+            0 0 18px #ffd400;
+    }
+}
+
+.red{
+    animation:none;
+    background:#ff3030;
+    box-shadow:
+        0 0 5px #ff3030,
+        0 0 10px #ff3030;
+}
+
+      #deviceDonut{
+    animation: chartAppear .8s ease;
+}
+
+@keyframes chartAppear{
+    from{
+        opacity:0;
+        transform:scale(.85) rotate(-15deg);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) rotate(0);
+    }
+}
+
+#donut-pct{
+    transition:all .4s ease;
+    animation:pulse 2s infinite;
+    text-shadow:
+        0 0 8px rgba(96,165,250,.4);
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+      .donut-wrapper{
+    position:relative;
+    width:260px;
+    height:260px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.scan-ring{
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    pointer-events:none;
+
+    background:conic-gradient(
+        transparent 0deg,
+        transparent 310deg,
+        rgba(0,255,170,.08) 325deg,
+        rgba(0,255,170,.9) 340deg,
+        rgba(0,255,170,.08) 355deg,
+        transparent 360deg
+    );
+
+    -webkit-mask:
+        radial-gradient(circle,
+            transparent 67%,
+            #000 69%,
+            #000 76%,
+            transparent 78%);
+    mask:
+        radial-gradient(circle,
+            transparent 67%,
+            #000 69%,
+            #000 76%,
+            transparent 78%);
+
+    animation:scanner 2.5s linear infinite;
+}
+
+@keyframes scanner{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+#donut-pct{
+    position:absolute;
+    top:39%;              /* 50% emas */
+    left:49%;
+    transform:translate(-50%, -50%);
+    font-size:32px;
+    font-weight:bold;
+    color:#60a5fa;
+    text-shadow:0 0 8px rgba(96,165,250,.4);
+    z-index:10;
+}
+</style>
+</head>
+<body>
+
+<!--<header>-->
+<!--  <div style="font-weight:700">📡 MG Aloqa tizimlari monitoringi platformasi</div>-->
+<!--  <div style="display:flex;align-items:center;gap:12px;color:#fff">-->
+<!--    <div>{{ user_obj.get_full_name|default:user_obj.username }}</div>-->
+<!--    <a href="{% url 'logout' %}" style="color:#fff">Chiqish</a>-->
+<!--  </div>-->
+<!--</header>-->
+
+
+<header style="
+    height:72px;
+    background:#1e293b;
+    border-bottom:1px solid #334155;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
+    box-sizing:border-box;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+">
+
+    <!-- Logo / Sarlavha -->
+    <div style="
+        display:flex;
+        flex-direction:column;
+    ">
+
+        <div style="
+            font-size:22px;
+            font-weight:700;
+            color:#ffffff;
+            letter-spacing:.5px;
+        ">
+            MG Aloqa tizimlari monitoringi platformasi
+        </div>
+
+        <div style="
+            font-size:13px;
+            color:#94a3b8;
+            margin-top:4px;
+        ">
+            Real vaqt rejimida monitoring
+        </div>
+
+    </div>
+
+
+    <!-- O'ng tomon -->
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:18px;
+    ">
+
+        <div style="
+            width:42px;
+            height:42px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            color:white;
+            font-size:18px;
+            font-weight:bold;
+        ">
+            {{ user_obj.username|first|upper }}
+        </div>
+
+        <div>
+
+            <div style="
+                color:#ffffff;
+                font-size:16px;
+                font-weight:600;
+            ">
+                {{ user_obj.get_full_name|default:user_obj.username }}
+            </div>
+
+            <div style="
+                color:#94a3b8;
+                font-size:12px;
+            ">
+                Tizim foydalanuvchisi
+            </div>
+
+        </div>
+
+        <a href="{% url 'logout' %}"
+           style="
+                text-decoration:none;
+                background:#dc2626;
+                color:white;
+                padding:10px 18px;
+                border-radius:10px;
+                font-size:14px;
+                font-weight:600;
+                border:1px solid #ef4444;
+           ">
+            Chiqish
+        </a>
+
+    </div>
+
+</header>
+
+
+{% if messages %}
+  <div class="message-container">
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="layout">
+<!--    <aside class="sidebar" style="background-color:green;">-->
+<!--        <h3> <div>{{ user_obj.get_full_name|default:user_obj.username }}</div></h3>-->
+<!--       <a href="{% url 'index' %}">Monitoring</a> <br>-->
+<!--            <a href="{% url 'eventsAll' %}">Tadbirlar</a><br>-->
+<!--            <a href="{% url 'phones' %}">Telefon raqamlar</a>-->
+<!--  </aside>-->
+<aside style="
+    width:260px;
+    background:#0f172a;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:25px 20px;
+    border-right:1px solid #1e293b;
+    box-sizing:border-box;
+    min-height:100vh;
+">
+
+    <!-- Foydalanuvchi profili qismi -->
+    <div style="
+        text-align:center;
+        padding-bottom:25px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        margin-bottom:25px;
+    ">
+
+        <!-- Avatar (Ismning birinchi harfi) -->
+        <div style="
+            width:80px;
+            height:80px;
+            border-radius:50%;
+            margin:auto;
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:30px;
+            font-weight:bold;
+            color:white;
+            box-shadow:0 10px 25px rgba(37,99,235,.4);
+        ">
+            {{ user_obj.username|first|upper }}
+        </div>
+
+        <!-- Foydalanuvchi ismi -->
+        <h3 style="
+            margin:18px 0 5px;
+            font-size:18px;
+            font-weight:600;
+        ">
+            {{ user_obj.get_full_name|default:user_obj.username }}
+        </h3>
+
+        <!-- Lavozim / Rol -->
+        <div style="
+            color:#94a3b8;
+            font-size:14px;
+        ">
+            Foydalanuvchi
+        </div>
+
+    </div>
+
+    <!-- Menyu havolalari -->
+    <a href="{% url 'index' %}"
+       style="
+        text-decoration:none;
+        color:#fff;
+        background:linear-gradient(135deg,#2563eb,#1d4ed8);
+        padding:14px 18px;
+        border-radius:12px;
+        margin-bottom:12px;
+        font-weight:600;
+        transition:.3s;
+        display:block;
+        box-shadow:0 4px 12px rgba(37,99,235,.3);
+    ">
+        Bosh sahifa
+    </a>
+
+    <a href="{% url 'eventsAll' %}"
+       style="
+        text-decoration:none;
+        color:#cbd5e1;
+        background:#1e293b;
+        padding:14px 18px;
+        border-radius:12px;
+        margin-bottom:12px;
+        font-weight:500;
+        transition:.3s;
+        display:block;
+    "
+    onmouseover="this.style.background='#334155'; this.style.color='#fff';"
+    onmouseout="this.style.background='#1e293b'; this.style.color='#cbd5e1';">
+        Hodisalar
+    </a>
+
+    <a href="{% url 'phones' %}"
+       style="
+        text-decoration:none;
+        color:#cbd5e1;
+        background:#1e293b;
+        padding:14px 18px;
+        border-radius:12px;
+        font-weight:500;
+        transition:.3s;
+        display:block;
+    "
+    onmouseover="this.style.background='#334155'; this.style.color='#fff';"
+    onmouseout="this.style.background='#1e293b'; this.style.color='#cbd5e1';">
+        Telefon raqamlar
+    </a>
+
+     <a href="{% url 'dutys' %}"
+       style="
+        margin-top:10px;
+        text-decoration:none;
+        color:#cbd5e1;
+        background:#1e293b;
+        padding:14px 18px;
+        border-radius:12px;
+        font-weight:500;
+        display:block;
+    ">
+        Navbatchilar
+    </a>
+
+
+     <div style="
+        margin-top:10px;
+        background:#1e293b;
+        padding:18px;
+        border-radius:15px;
+        box-shadow:0 8px 20px rgba(0,0,0,.25);
+    ">
+
+        <h3 style="
+            margin:0 0 15px;
+            text-align:center;
+            font-size:20px;
+        ">
+            Bugungi navbatchilar
+        </h3>
+
+        <div style="
+            background:#0f172a;
+            border-radius:10px;
+            padding:12px;
+            margin-bottom:15px;
+            color:#cbd5e1;
+            font-size:14px;
+        ">
+            <div style="margin-bottom:8px;">
+                <strong>Server vaqti:</strong><br>
+                {{ current_time|date:"Y-m-d H:i" }}
+            </div>
+
+            <div>
+                <strong>Sana:</strong><br>
+                {{ date_to_check }}
+            </div>
+        </div>
+
+        {% if duties %}
+
+            {% for duty in duties %}
+
+            <div style="
+                background:#0f172a;
+                border:1px solid #334155;
+                border-radius:12px;
+                padding:15px;
+                margin-bottom:15px;
+            ">
+
+                <div style="margin-bottom:10px;">
+                    <strong style="color:#60a5fa;">Radio navbatchi</strong><br>
+                    {{ duty.user_radio.first_name }}
+                    {{ duty.user_radio.last_name }}
+                </div>
+
+                <div style="margin-bottom:10px;">
+                    <strong style="color:#60a5fa;">Telefon navbatchisi</strong><br>
+                    {{ duty.user_phone.first_name }}
+                    {{ duty.user_phone.last_name }}
+                </div>
+
+                <div style="margin-bottom:10px;">
+                    <strong style="color:#60a5fa;">Outlook navbatchisi</strong><br>
+                    {{ duty.user_outlook.first_name }}
+                    {{ duty.user_outlook.last_name }}
+                </div>
+
+                <div style="
+                    margin-top:15px;
+                    padding-top:10px;
+                    border-top:1px solid #334155;
+                    color:#94a3b8;
+                    font-size:13px;
+                ">
+                    {{ duty.date_b }} — {{ duty.date_f }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+        <div style="
+            background:#7f1d1d;
+            color:#fecaca;
+            padding:15px;
+            border-radius:10px;
+            text-align:center;
+            font-weight:bold;
+        ">
+            Bugungi navbatchilar kiritilmagan.
+        </div>
+
+        {% endif %}
+
+    </div>
+</aside>
+<!--  <aside class="sidebar">-->
+<!--    <h3>Viloyatlar</h3>-->
+<!--    <button class="region-btn active" data-id="all" onclick="onRegionClick(this)">Hammasi</button>-->
+<!--    {% for r in regions %}-->
+<!--      <button class="region-btn" data-id="{{ r.id }}" onclick="onRegionClick(this)">{{ r.name }}</button>-->
+<!--    {% endfor %}-->
+<!--  </aside>-->
+    <aside style="
+    width:260px;
+    background:#0f172a;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:25px 20px;
+    border-right:1px solid #1e293b;
+    box-sizing:border-box;
+    min-height:100vh;
+">
+
+    <!-- Sarlavha qismi -->
+    <div style="
+        padding-bottom:15px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        margin-bottom:20px;
+    ">
+        <h3 style="
+            margin:0;
+            font-size:18px;
+            font-weight:600;
+            text-align:center;
+            color:#f8fafc;
+            letter-spacing:0.5px;
+        ">
+            Bo'linmalar
+        </h3>
+    </div>
+
+    <!-- Viloyatlar tugmalari ro'yxati -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+
+        <!-- Hammasi tugmasi (Faol holatda) -->
+        <button class="region-btn active" data-id="all" onclick="onRegionClick(this)"
+           style="
+            width:100%;
+            text-align:left;
+            border:none;
+            outline:none;
+            cursor:pointer;
+            color:#fff;
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
+            padding:14px 18px;
+            border-radius:12px;
+            font-weight:600;
+            transition:.3s;
+            box-shadow:0 4px 12px rgba(37,99,235,.3);
+        ">
+            Hammasi
+        </button>
+
+        <!-- Viloyatlar bo'yicha tsikl -->
+        {% for r in regions %}
+            <button class="region-btn" data-id="{{ r.id }}" onclick="onRegionClick(this)"
+               style="
+                width:100%;
+                text-align:left;
+                border:none;
+                outline:none;
+                cursor:pointer;
+                color:#cbd5e1;
+                background:#1e293b;
+                padding:14px 18px;
+                border-radius:12px;
+                font-weight:500;
+                transition:.3s;
+            "
+            onmouseover="if(!this.classList.contains('active')){this.style.background='#334155'; this.style.color='#fff';}"
+            onmouseout="if(!this.classList.contains('active')){this.style.background='#1e293b'; this.style.color='#cbd5e1';}">
+                {{ r.name }}
+            </button>
+        {% endfor %}
+
+    </div>
+
+</aside>
+
+<!--  <main class="main">-->
+<!--    &lt;!&ndash; top small stat boxes for device types + totals &ndash;&gt;-->
+<!--    <div class="top-stats" id="top-stats">-->
+<!--      &lt;!&ndash; filled by JS &ndash;&gt;-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; three boxes: Events (with modal details), Top 3 Users, Devices list &ndash;&gt;-->
+<!--    <div class="three">-->
+<!--      <div class="box">-->
+<!--        <h4>Tadbirlar ro'yxati</h4>-->
+<!--        <div id="events-list">Yuklanmoqda...</div>-->
+<!--      </div>-->
+
+<!--      <div class="box">-->
+<!--        <h4>Top 3 Users</h4>-->
+<!--        <ul id="top-users"></ul>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; status donut + inactive list &ndash;&gt;-->
+<!--    <div class="status-row">-->
+<!--      <div class="chart-wrap">-->
+<!--        <canvas id="deviceDonut"></canvas>-->
+<!--        <div class="center-pct" id="donut-pct">100%</div>-->
+<!--      </div>-->
+<!--      <div style="flex:1">-->
+<!--        <h4>Ishlamayotgan qurilmalar</h4>-->
+<!--        <div id="inactive-list" style="max-height:220px;overflow:auto">Yuklanmoqda...</div>-->
+<!--        <div style="display:flex;gap:12px;margin-top:12px">-->
+<!--          <div class="small-stat">Ishlayotgan: <span id="num-active">0</span></div>-->
+<!--          <div class="small-stat">Ishlamayotgan: <span id="num-inactive">0</span></div>-->
+<!--          <div class="small-stat">Jami: <span id="num-total">0</span></div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </main>-->
+
+<main style="
+    flex: 1;
+    background: #0f172a;
+    padding: 25px;
+    overflow: auto;
+    color: #f8fafc;
+    box-sizing: border-box;
+    height:100vh;
+">
+
+  <!-- Yuqori statistikalar (top stats) -->
+  <div class="top-stats" id="top-stats" style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+  ">
+    <!-- JS orqali to'ldiriladi -->
+  </div>
+
+  <!-- Tadbirlar ro'yxati va Top 3 Users -->
+  <div class="three" style="
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+  ">
+
+    <!-- Tadbirlar kartasi -->
+    <div class="box" style="
+        background: #1e293b;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        border: 1px solid #334155;
+    ">
+      <h4 style="
+          margin: 0 0 18px 0;
+          color: #f8fafc;
+          font-size: 20px;
+          font-weight: 600;
+          border-bottom: 2px solid #334155;
+          padding-bottom: 12px;
+      ">
+        Hodisalar ro'yxati
+      </h4>
+      <div id="events-list" style="color: #94a3b8; font-size: 15px;">
+        Yuklanmoqda...
+      </div>
+    </div>
+
+    <!-- Top 3 Users kartasi -->
+    <div class="box" style="
+        background: #1e293b;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        border: 1px solid #334155;
+    ">
+      <h4 style="
+          margin: 0 0 18px 0;
+          color: #f8fafc;
+          font-size: 20px;
+          font-weight: 600;
+          border-bottom: 2px solid #334155;
+          padding-bottom: 12px;
+      ">
+        Navbatchilar reytingi
+      </h4>
+      <ul id="top-users" style="
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      ">
+        <!-- JS orqali to'ldiriladi -->
+      </ul>
+    </div>
+
+  </div>
+
+   <!-- Pastki qism -->
+    <div style="
+        display:grid;
+        grid-template-columns:320px 1fr;
+        gap:20px;
+    ">
+
+        <!-- Donut -->
+        <div style="
+            background:#1e293b;
+            border-radius:18px;
+            padding:25px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            position:relative;
+            min-height:320px;
+            box-shadow:0 10px 30px rgba(0,0,0,.3);
+            border:1px solid #334155;
+        ">
+
+         <div class="donut-wrapper">
+
+        <canvas id="deviceDonut"></canvas>
+
+        <div class="scan-ring"></div>
+
+        <div id="donut-pct">100%</div>
+
+    </div>
+
+        </div>
+
+
+        <!-- Qurilmalar -->
+        <div style="
+            background:#1e293b;
+            border-radius:18px;
+            padding:25px;
+            box-shadow:0 10px 30px rgba(0,0,0,.3);
+            border:1px solid #334155;
+        ">
+
+            <h3 style="
+                margin-top:0;
+                margin-bottom:20px;
+                color:#f8fafc;
+            ">
+                Ishlamayotgan qurilmalar
+            </h3>
+
+            <div id="inactive-list"
+                 style="
+                    background:#0f172a;
+                    border:2px dashed #334155;
+                    border-radius:14px;
+                    padding:18px;
+                    min-height:140px;
+                    color:#94a3b8;
+                 ">
+                Yuklanmoqda...
+            </div>
+
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:15px;
+                margin-top:20px;
+            ">
+
+                <div style="
+                    background:rgba(22, 101, 52, 0.3);
+                    color:#4ade80;
+                    border:1px solid rgba(74, 222, 128, 0.2);
+                    border-radius:14px;
+                    padding:18px;
+                    text-align:center;
+                ">
+                    <div>Ishlayotgan</div>
+
+                    <div id="num-active"
+                         style="
+                            font-size:30px;
+                            margin-top:10px;
+                            font-weight:bold;
+                         ">
+                        0
+                    </div>
+
+                </div>
+
+
+
+                <div style="
+                    background:rgba(153, 27, 27, 0.3);
+                    color:#f87171;
+                    border:1px solid rgba(248, 113, 113, 0.2);
+                    border-radius:14px;
+                    padding:18px;
+                    text-align:center;
+                ">
+
+                    <div>Ishlamayotgan</div>
+
+                    <div id="num-inactive"
+                         style="
+                            font-size:30px;
+                            margin-top:10px;
+                            font-weight:bold;
+                         ">
+                        0
+                    </div>
+
+                </div>
+
+
+
+                <div style="
+                    background:rgba(30, 64, 175, 0.3);
+                    color:#60a5fa;
+                    border:1px solid rgba(96, 165, 250, 0.2);
+                    border-radius:14px;
+                    padding:18px;
+                    text-align:center;
+                ">
+
+                    <div>Jami</div>
+
+                    <div id="num-total"
+                         style="
+                            font-size:30px;
+                            margin-top:10px;
+                            font-weight:bold;
+                         ">
+                        0
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+  <!-- chat column 25% width -->
+<!--  <aside class="chat">-->
+<!--    <div class="header"><strong>Umumiy Chat</strong></div>-->
+<!--    <div class="messages" id="chat-messages"></div>-->
+
+<!--    <form id="chat-form" class="chat-form" onsubmit="sendChat(event)">-->
+<!--      <input type="text" id="chat-text" placeholder="Xabar yozing..." />-->
+<!--      <label>-->
+<!--        📎 <input type="file" id="chat-file" accept="image/*,video/*" style="display:none" onchange="handleFileSelect()" />-->
+<!--      </label>-->
+<!--      <div id="file-info" style="font-size:12px;color:#6b7280"></div>-->
+<!--      <button type="submit">Yuborish</button>-->
+<!--    </form>-->
+<!--  </aside>-->
+    <aside class="chat" style="
+  background-color: #1e293b;
+  border-radius: 0px;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  overflow: hidden;
+  display: flex;
+  height:100vh;
+  flex-direction: column;
+">
+  <div class="header" style="
+    background-color: #0f172a;
+    color: #f8fafc;
+    text-align:center;
+    padding: 16px;
+    border-bottom: 1px solid #334155;
+  ">
+    <strong style="font-size: 18px;text-align:center;">Umumiy Chat</strong>
+  </div>
+
+  <div
+    class="messages"
+    id="chat-messages"
+    style="
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 15px;
+      min-height: 250px;
+      overflow-y: auto;
+    "
+  ></div>
+
+  <form
+    id="chat-form"
+    class="chat-form"
+    onsubmit="sendChat(event)"
+    style="
+      background-color: #1e293b;
+      padding: 12px;
+      border-top: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <input
+      type="text"
+      id="chat-text"
+      placeholder="Xabar yozing..."
+      style="
+        flex: 1;
+        background-color: #0f172a;
+        color: #f8fafc;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 8px 12px;
+        outline: none;
+      "
+    />
+
+    <label style="cursor: pointer; color: #94a3b8; font-size: 18px;">
+          <img src="{% static 'img/19.png' %}" width="20px" style="padding:0;">
+      <input
+        type="file"
+        id="chat-file"
+        accept="image/*,video/*"
+        style="display: none"
+        onchange="handleFileSelect()"
+      />
+    </label>
+
+    <div id="file-info" style="font-size: 12px; color: #94a3b8;"></div>
+
+    <button type="submit" style="
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 600;
+    ">
+      Yuborish
+    </button>
+  </form>
+</aside>
+</div>
+
+<!-- Modals -->
+<div id="event-modal" class="modal">
+  <div class="card">
+    <h3 id="event-modal-title">Tadbir tafsiloti</h3>
+    <div id="event-modal-body"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn secondary" onclick="closeModal('event-modal')">Yopish</button>
+    </div>
+  </div>
+</div>
+
+<div id="create-event-modal" class="modal">
+  <div class="card">
+    <h3 id="create-title">Yangi Tadbir yaratish</h3>
+    <form id="create-event-form" onsubmit="createEvent(event)">
+      <div><label>Nom</label><input name="name" id="ev-name" required style="width:100%;padding:8px;margin:6px 0" /></div>
+      <div><label>Tarif</label><textarea name="description" id="ev-desc" style="width:100%;padding:8px;margin:6px 0"></textarea></div>
+      <div><label>Sana</label><input name="date" id="ev-date" type="date" required style="padding:8px;margin:6px 0" /></div>
+      <div><label>Viloyat</label>
+        <select id="ev-region" style="padding:8px;margin:6px 0">
+          <option value="all">--Tanlang--</option>
+          {% for r in regions %}
+            <option value="{{ r.id }}">{{ r.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn" type="submit">Saqlash</button>
+        <button class="btn secondary" type="button" onclick="closeModal('create-event-modal')">Bekor</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="edit-event-modal" class="modal">
+  <div class="card">
+    <h3>Edit tadbir</h3>
+    <form id="edit-event-form" onsubmit="editEventSubmit(event)">
+      <input type="hidden" id="edit-ev-id" />
+      <div><label>Nom</label><input name="name" id="edit-ev-name" required style="width:100%;padding:8px;margin:6px 0" /></div>
+      <div><label>Tarif</label><textarea name="description" id="edit-ev-desc" style="width:100%;padding:8px;margin:6px 0"></textarea></div>
+      <div><label>Sana</label><input name="date" id="edit-ev-date" type="date" required style="padding:8px;margin:6px 0" /></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn" type="submit">Saqlash</button>
+        <button class="btn secondary" type="button" onclick="closeModal('edit-event-modal')">Bekor</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="edit-msg-modal" class="modal">
+  <div class="card">
+    <h3>Xabarni tahrirlash</h3>
+    <form id="edit-msg-form" onsubmit="submitEditMsg(event)">
+      <input type="hidden" id="edit-msg-id" />
+      <textarea id="edit-msg-text" style="width:100%;padding:8px;" required></textarea>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn" type="submit">Saqlash</button>
+        <button class="btn secondary" type="button" onclick="closeModal('edit-msg-modal')">Bekor</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+ <!-- Baza stansiya modal -->
+<div id="myModal12" class="custom-modal">
+  <div class="custom-modal-content">
+    <span class="custom-modal-close" onclick="closeCustomModal1('myModal12')">&times;</span>
+    <h2>Baza stansiyalar</h2>
+    <p>Yuklanmoqda...</p>
+  </div>
+</div>
+
+
+<!--pats stansiya modal-->
+<div id="myModal13" class="custom-modal">
+  <div class="custom-modal-content">
+    <span class="custom-modal-close" onclick="closeCustomModal('myModal13')">&times;</span>
+    <h2>Panasonic ATSlar</h2>
+    <p>Yuklanmoqda...</p>
+  </div>
+</div>
+
+
+<!--gats stansiya modal-->
+   <div id="myModal14" class="custom-modal">
+    <div class="custom-modal-content">
+      <span class="custom-modal-close" onclick="closeCustomModal('myModal14')">&times;</span>
+      <h2>Bu maxsus modal</h2>
+      <p>Modal gats stansiya.</p>
+    </div>
+   </div>
+
+<!--vlan stansiya modal-->
+   <div id="myModal15" class="custom-modal">
+    <div class="custom-modal-content">
+      <span class="custom-modal-close" onclick="closeCustomModal('myModal15')">&times;</span>
+      <h2>Bu maxsus modal</h2>
+      <p>Modal vlan stansiya.</p>
+    </div>
+   </div>
+
+<!--navbarchilar royhti  stansiya modal-->
+   <div id="myModal16" class="custom-modal">
+    <div class="custom-modal-content">
+      <span class="custom-modal-close" onclick="closeCustomModal('myModal16')">&times;</span>
+      <h2>Bu maxsus modal</h2>
+      <p>Modal fuqaro stansiya.</p>
+    </div>
+   </div>
+
+<!--tadbir royhati stansiya modal-->
+   <div id="myModal17" class="custom-modal">
+    <div class="custom-modal-content">
+      <span class="custom-modal-close" onclick="closeCustomModal('myModal17')">&times;</span>
+      <h2>Bu maxsus modal</h2>
+      <p>Modal tadbir royhati stansiya.</p>
+    </div>
+   </div>
+
+<!--Firewall royhati  modal-->
+   <div id="myModal18" class="custom-modal">
+    <div class="custom-modal-content">
+      <span class="custom-modal-close" onclick="closeCustomModal('myModal18')">&times;</span>
+      <h2>Bu maxsus modal</h2>
+      <p>Modal firewall royhati.</p>
+    </div>
+   </div>
+
+<!--tadbir royhati batafsil stansiya modal-->
+<div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h2 id="event-modal-user" class="text-lg font-bold mb-2"></h2>
+    <div id="event-modal-m_unit" class="text-sm text-gray-700"></div>
+    <div id="event-modal-communication_node" class="text-sm text-gray-700"></div>
+    <div id="event-modal-main_body" class="text-sm text-gray-700"></div>
+    <div id="event-modal-region" class="text-sm text-gray-700"></div>
+    <div id="event-modal-body" class="text-sm text-gray-700"></div>
+    <div id="event-modal-body" class="text-sm text-gray-700"></div>
+
+  </div>
+</div>
+
+
+    </div>
+   </div>
+
+
+
+<script>
+/* GLOBALS */
+const CSRF = '{{ csrf_token }}';
+const USER_FULL = "{{ user_obj.get_full_name|default:user_obj.username|escapejs }}";
+const USER_ID = {{ user_obj.id }};
+const MAX_FILE_SIZE = 20 * 1024 * 1024;
+let currentRegion = 'all';
+let donutChart;
+
+/* Helpers */
+function qs(sel, base=document) { return base.querySelector(sel); }
+function qsa(sel, base=document) { return Array.from(base.querySelectorAll(sel)); }
+function openModal(id){ qs('#'+id).style.display='flex'; }
+function closeModal(id){ qs('#'+id).style.display='none'; }
+
+/* REGION selection */
+function onRegionClick(btn){
+  const nodes = qsa('.region-btn');
+  nodes.forEach(n=>n.classList.remove('active'));
+  btn.classList.add('active');
+  currentRegion = btn.dataset.id;
+  loadRegionData(currentRegion);
+}
+
+/* LOAD region data */
+async function loadRegionData(regionId='all'){
+  try{
+    const res = await fetch(`/api/region/${regionId}/`);
+    const data = await res.json();
+
+    // top small boxes for device types + totals
+    const dt = data.device_types || {};
+    const statsHtml = `
+      <div class="stat custom-btn" onclick="openCustomModal1('myModal12')">Baza Stansiya<br><strong>${dt.BazaStansiya||0}</strong></div>
+      <div class="stat custom-btn" onclick="openCustomModal('myModal13')">Panasonic ATS<br><strong>${dt.PATS||0}</strong></div>
+      <div class="stat custom-btn" onclick="openCustomModal2('myModal14')">Grandstream ATS<br><strong>${dt.GATS||0}</strong></div>
+       <div class="stat custom-btn" onclick="openCustomModal5('myModal18')">Firewall<br><strong>${dt.Firewall||0}</strong></div>
+     {#<div class="stat custom-btn"  onclick="openCustomModal5('myModal17')">Abonentlar<br><strong>${dt.Abonent||0}</strong></div>#}
+      <div class="stat custom-btn" onclick="openCustomModal3('myModal15')">VLAN<br><strong>${dt.VLAN||0}</strong></div>
+      <div class="stat custom-btn" onclick="openCustomModal4('myModal16')">Navbatchilar ro'yhati<br><strong>${data.total_users||0}</strong></div>
+      <div class="stat custom-btn">Tadbir<br><strong>${data.total_events||0}</strong></div>
+    `;
+    qs('#top-stats').innerHTML = statsHtml;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//################################# Tadbirlarni yuklash ################################################################
+function qs(sel) {
+  return document.querySelector(sel);
+}
+
+// Tadbirlarni yuklash
+fetch(`/api/region/${regionId}/`)
+  .then(res => res.json())
+  .then(data => {
+    const events = data.events_summary || [];
+    console.log("Tadbirlar:", events);
+
+    if (events.length === 0) {
+      qs('#events-list').innerHTML = '<div class="muted">Tadbirlar yo‘q</div>';
+    } else {
+      qs('#events-list').innerHTML = events.map(ev => `
+        <div onclick="openEventDetails(${ev.id})"
+             style="padding:8px;border-bottom:1px solid #eee;cursor:pointer">
+          <strong> <strong>${ev.theme}</strong> <span class="muted"><span style="margin-top:8px;padding:3px;background-color:yellow;color:black;border-radius:5px;"><strong></strong> ${ev.done ? 'Tugatildi' : 'Faol'}</strong>
+          <span class="muted">(${ev.user__username || 'nomaʼlum'})</span>
+        </div>
+      `).join('');
+    }
+  })
+  .catch(err => console.error("Tadbirlarni olishda xato:", err));
+
+// Tadbir detallarini ko‘rsatish
+window.openEventDetails = async function(id) {
+  try {
+    const res = await fetch(`/api/events/${id}/`);
+    if (!res.ok) throw new Error('API xato status: ' + res.status);
+    const ev = await res.json();
+    console.log("Tanlangan tadbir:", ev);
+
+    const titleEl = document.getElementById('event-modal-title');
+    const bodyEl = document.getElementById('event-modal-body');
+    const modal = document.getElementById('event-modal');
+
+    if (!titleEl || !bodyEl || !modal) {
+      console.error("Modal elementlari topilmadi!");
+      return;
+    }
+
+    titleEl.innerText = ev.theme || "Tadbir nomi yo‘q";
+    bodyEl.innerHTML = `
+      <div><strong>foydalanuvchi:</strong> ${ev.user__username || '-'}</div>
+      <div><strong>struktura:</strong> ${ev.m_unit || '-'}</div>
+      <div><strong>aloqa tuguni:</strong> ${ev.c_node || '-'}</div>
+      <div><strong></strong> ${ev.main_body || '-'}</div>
+      <div><strong>Hudud:</strong> ${ev.region__name || '-'}</div>
+      <div><strong>Vaqt:</strong> ${ev.timestamp || '-'}</div>
+    `;
+
+    modal.style.display = 'flex'; // modalni ochish
+  } catch (err) {
+    console.error("Tadbirni olishda xatolik:", err);
+    alert('Tadbir maʼlumotini yuklashda xatolik!');
+  }
+};
+
+// Modalni yopish
+window.closeModal = function(id) {
+  document.getElementById(id).style.display = 'none';
+};
+//################################# Tadbirlarni yuklash ################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //####################################### top 3 users #####################################################
+<!--    const users = data.users_summary || [];-->
+<!--    users.sort((a,b)=> (b.score||0) - (a.score||0));-->
+<!--    const top5 = users.slice(0,5);-->
+<!--    qs('#top-users').innerHTML = top5.length ? top5.map((u,i)=>`<li>${i+1}. ${u.first_name || ''} ${u.last_name || ''} — ⭐${u.total_score||0}</li>`).join('') : '<li class="muted">0</li>';-->
+        const currentRegion = '{{ user_obj.region.name }}';
+        {#console.log("joriy hududdddd=",currentRegion);#}
+        const users = data.users_summary || [];
+
+<!--        const regionalUsers = users.filter(u =>-->
+<!--        (u.region__name === currentRegion)-->
+<!--    );-->
+console.log(data.users_summary);
+<!--        regionalUsers.sort((a,b)=> (b.score||0) - (a.score||0));-->
+<!--        const top5 = regionalUsers.slice(0,5);-->
+<!--        qs('#top-users').innerHTML = top5.length ? top5.map((u,i)=>`<li>${i+1}. ${u.first_name || ''} ${u.last_name || ''} — ⭐${u.score||0}</li>`).join('') : '<li class="muted">hududida foydalanuvchi topilmadi</li>';-->
+
+ const uniqueUsers = new Map();
+
+users.forEach(u => {
+    [
+        {
+            id: u.user_outlook__id,
+            first_name: u.user_outlook__first_name,
+            last_name: u.user_outlook__last_name,
+            total_score: u.user_outlook__total_score
+        },
+        {
+            id: u.user_phone__id,
+            first_name: u.user_phone__first_name,
+            last_name: u.user_phone__last_name,
+            total_score: u.user_phone__total_score
+        },
+        {
+            id: u.user_radio__id,
+            first_name: u.user_radio__first_name,
+            last_name: u.user_radio__last_name,
+            total_score: u.user_radio__total_score
+        }
+    ].forEach(person => {
+        if (!person.id) return;
+
+        if (!uniqueUsers.has(person.id)) {
+            uniqueUsers.set(person.id, person);
+        }
+    });
+});
+
+const topUsers = Array.from(uniqueUsers.values())
+    .sort((a, b) => b.total_score - a.total_score);
+
+qs('#top-users').innerHTML = topUsers.map((u, i) => `
+    <li>${i + 1}. ${u.first_name} ${u.last_name} — ⭐${u.total_score} ball</li>
+`).join('');
+
+
+
+
+
+    //########################################### devices list ##########################################################
+    const devices = data.total_devices;
+      console.log('aktiv qurilmalar - ',data);
+      console.log('aktiv bolmagan qurilmalar - ',data.inactive_list);
+    {#// show simple listing#}
+    {#qs('#device-list').innerHTML = (data.device_types ? Object.entries(data.device_types).map(([k,v]) => `<div class="muted">${k}: ${v}</div>`).join('') : '');#}
+    {##}
+    {#// inactive list#}
+    const inactive = data.inactive_list || [];
+    if(inactive.length===0) qs('#inactive-list').innerHTML = '<i>Hammasi ishlayapti</i>';
+    else qs('#inactive-list').innerHTML = data.inactive_list.map(d=>`<div>🔴 ${d.name} — ${d.ip_address} -${d.region__name}</div>`).join('');
+
+    console.log("faol qurilmalar soni -",data.active_devices);
+    qs('#num-active').innerHTML = data.active_devices || 0;
+    qs('#num-inactive').innerText = data.inactive_devices || 0;
+    qs('#num-total').innerText = data.total_devices || 0;
+    qs('#donut-pct').innerText = (data.percent!==undefined ? data.percent : 100) + '%';
+
+    // draw donut
+    drawDonut(data.active_devices||0, data.inactive_devices||0);
+
+  }catch(err){ console.error('Load region data err', err); }
+}
+
+/* DONUT chart */
+function animatePercent(percent){
+
+    const el = document.getElementById('donut-pct');
+
+    let start = 0;
+
+    const timer = setInterval(()=>{
+
+        start++;
+
+        el.innerHTML = start + "%";
+
+        if(start >= percent){
+            clearInterval(timer);
+        }
+
+    },15);
+
+}
+
+function drawDonut(active, inactive){
+
+    const total = active + inactive;
+    const percent = total ? Math.round(active / total * 100) : 0;
+
+    const ctx = qs('#deviceDonut').getContext('2d');
+
+    if(donutChart) donutChart.destroy();
+
+    donutChart = new Chart(ctx, {
+
+        type:'doughnut',
+
+        data:{
+            labels:['Faol','Nosoz'],
+            datasets:[{
+                data:[active,inactive],
+                backgroundColor:[
+                    '#22c55e',
+                    '#ef4444'
+                ],
+                borderWidth:0,
+                hoverOffset:8
+            }]
+        },
+
+        options:{
+
+            responsive:true,
+
+            cutout:'55%',
+
+            animation:{
+                animateRotate:true,
+                animateScale:true,
+                duration:1800,
+                easing:'easeOutQuart'
+            },
+
+            plugins:{
+                legend:{
+                    position:'bottom',
+                    labels:{
+                        color:'#cbd5e1',
+                        padding:18,
+                        usePointStyle:true,
+                        pointStyle:'circle'
+                    }
+                },
+                tooltip:{
+                    backgroundColor:'#0f172a',
+                    titleColor:'#fff',
+                    bodyColor:'#fff'
+                }
+            }
+
+        }
+
+    });
+
+    animatePercent(percent);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ############################################ CHAT functionality ################################################### */
+async function loadChat(){
+  try{
+    const res = await fetch('/api/chat/');
+    const msgs = await res.json();
+    const container = qs('#chat-messages');
+    container.innerHTML = '';
+    msgs.forEach(m=>{
+      const div = document.createElement('div');
+      div.className = 'bubble ' + (m.sender_id === USER_ID ? 'me':'other');
+      let html = '';
+      if(m.text) html += `<div style="color: black;">${escapeHtml(m.text)}</div>`;
+      if(m.file) {
+        const lower = m.file.toLowerCase();
+        if(lower.match(/\.(jpg|jpeg|png|gif)$/) || m.file.includes('image')) html += `<img src="${m.file}" width="200px" height="160px" />`;
+        else if(lower.match(/\.(mp4|webm|ogg)$/) || m.file.includes('video')) html += `<video controls src="${m.file}" width="200px"></video>`;
+        else html += `<div><a href="${m.file}" target="_blank">📎 Fayl</a></div>`;
+      }
+      html += `<span class="meta" style="color: black;">${escapeHtml(m.sender)} ${m.created_at? '• ' + new Date(m.created_at).toLocaleString():''}</span>`;
+      {#if(m.can_edit) html += `<div style="margin-top:6px"><button class="btn" onclick="openEditMsg(${m.id}, '${escapeJsString(m.text)}')">Tahrirlash</button></div>`;#}
+      div.innerHTML = html;
+      container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+  }catch(err){ console.error(err); }
+}
+function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+function escapeJsString(s){ if(!s) return ''; return s.replaceAll("'","\\'").replaceAll("\n","\\n"); }
+
+/* File select preview + limit */
+function handleFileSelect(){
+  const fi = qs('#chat-file');
+  const info = qs('#file-info');
+  if(!fi.files || fi.files.length===0){ info.innerText=''; return; }
+  const file = fi.files[0];
+  if(file.size > MAX_FILE_SIZE){ alert('Fayl 20MB dan katta bo\'lmasin'); fi.value=''; info.innerText=''; return; }
+  let icon='📎';
+  if(file.type.startsWith('image/')) icon='🖼️'; else if(file.type.startsWith('video/')) icon='🎬';
+  info.innerText = `${icon} ${file.name} (${(file.size/1024/1024).toFixed(1)} MB)`;
+}
+async function sendChat(e){
+  e.preventDefault();
+  const text = qs('#chat-text').value.trim();
+  const fileInput = qs('#chat-file');
+  const file = fileInput.files[0];
+  if(!text && !file) return;
+  if(file && file.size > MAX_FILE_SIZE){ alert('Fayl 20MB dan katta'); return; }
+  const fd = new FormData();
+  fd.append('text', text);
+  if(file) fd.append('file', file);
+  const res = await fetch('/api/chat/', { method:'POST', headers:{'X-CSRFToken':CSRF}, body: fd });
+  if(res.ok){ qs('#chat-text').value=''; fileInput.value=''; qs('#file-info').innerText=''; loadChat(); }
+}
+
+/* edit message */
+function openEditMsg(id, text){
+  qs('#edit-msg-id').value = id;
+  qs('#edit-msg-text').value = text || '';
+  openModal('edit-msg-modal');
+}
+async function submitEditMsg(e){
+  e.preventDefault();
+  const id = qs('#edit-msg-id').value;
+  const text = qs('#edit-msg-text').value;
+  const fd = new FormData();
+  fd.append('_method','PUT');
+  fd.append('text', text);
+  const res = await fetch(`/api/chat/${id}/edit/`, { method:'POST', headers:{'X-CSRFToken':CSRF}, body: fd });
+  if(res.ok){ closeModal('edit-msg-modal'); loadChat(); }
+  else alert('Tahrirlash xatolik berdi');
+}
+
+/* edit message */
+function openBazaMsg(id, text){
+  qs('#edit-msg-id').value = id;
+  qs('#edit-msg-text').value = text || '';
+  openModal('edit-msg-modal');
+}
+async function submitBazastansiyaMsg(e){
+  e.preventDefault();
+  const id = qs('#edit-msg-id').value;
+  const text = qs('#edit-msg-text').value;
+  const fd = new FormData();
+  fd.append('_method','PUT');
+  fd.append('text', text);
+  const res = await fetch(`/api/chat/${id}/edit/`, { method:'POST', headers:{'X-CSRFToken':CSRF}, body: fd });
+  if(res.ok){ closeModal('edit-msg-modal'); loadChat(); }
+  else alert('Tahrirlash xatolik berdi');
+}
+
+
+
+/* init */
+window.addEventListener('load', ()=>{
+  loadRegionData('all');
+  loadChat();
+  setInterval(loadChat, 60000);
+});
+
+//PATS uchun open close
+     function openCustomModal(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+//BAZASTANSIYA uchun open close
+    function openCustomModal1(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal1(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+//gats uchun open close
+    function openCustomModal2(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal2(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+//vlan uchun open close
+    function openCustomModal3(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal3(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+//navbatchilar uchun open close
+    function openCustomModal4(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal4(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+//firewall uchun open close
+    function openCustomModal5(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Modalni yopish
+    function closeCustomModal5(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Modal tashqarisiga bosilganda yopish
+    window.addEventListener('click', function(e) {
+      const modals = document.querySelectorAll('.custom-modal');
+      modals.forEach(modal => {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+
+
+
+
+
+
+
+
+
+//================================================Begining BaseStations in top list with modals==================================================
+async function openCustomModal1(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // Faqat BazaStansiya modali uchun
+  if (id === 'myModal12') {
+    try {
+      const res = await fetch(`/api/bazastansiyalar/${currentRegion}/`);
+        console.log('NATIJALAR baza dash   ----- ',res);
+      const devices = await res.json();
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal1('${id}')">&times;</span>
+          <h2>Baza stansiyalar</h2>
+          <p class="muted">Hech qanday baza stansiya topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail1(${d.id})" style="padding:15px;border-bottom:1px solid #eee;cursor:pointer; margin:7px 0px;">
+            <strong>${d.name}</strong>
+            <span class="muted"  style="background-color:yellow; color:black; border-radius:5px; padding:3px; margin:0px 10px;">${d.ip_address}</span>
+            ${d.is_active
+                ? `
+                <span class="led led1"></span>
+                <span class="led led2"></span>
+                <span class="led led3"></span>
+                `
+                : `
+                <span class="led red"></span>
+                <span class="led red"></span>
+                <span class="led red"></span>
+                `}
+          </div>
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal1('${id}')">&times;</span>
+          <h2>Baza stansiyalar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("Baza stansiyalarni olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+//Exactly one BS about
+async function openDeviceDetail1(id) {
+  try {
+    const res = await fetch(`/api/bazastansiya/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal12');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal1('myModal12')">&times;</span>
+      <h2>${dev.name}</h2>
+      <p><strong>IP manzil:</strong> ${dev.ip_address}</p>
+      <p><strong>Hudud:</strong> ${dev.region}</p>
+      <p><strong>Holat:</strong> ${dev.is_active ? 'Aktiv' : 'Noaktiv'}</p>
+      <p><strong>So‘nggi tekshiruv:</strong> ${dev.last_checked}</p>
+      <p><strong>Tur:</strong> ${dev.type}</p>
+
+      <button onclick="openCustomModal1('myModal12')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("Baza stansiya detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+
+//================================================Ending BaseStations in top list with modals==================================================
+
+
+
+
+//================================================Begining PATS in top list with modals==================================================
+async function openCustomModal(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // Faqat BazaStansiya modali uchun
+  if (id === 'myModal13') {
+    try {
+      const res = await fetch(`/api/patslar/${currentRegion}/`);
+      const devices = await res.json();
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal('${id}')">&times;</span>
+          <h2>Panasonic ATSlar</h2>
+          <p class="muted" style="text-align:center;">Hech qanday Panasonic ATSlar topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail(${d.id})"style="padding:15px;border-bottom:1px solid #eee;cursor:pointer; margin:7px 0px;">
+            <strong>${d.name}</strong>
+            <span class="muted"  style="background-color:yellow; color:black; border-radius:5px; padding:3px; margin:0px 10px;">${d.ip_address}</span>
+           ${d.is_active
+                ? `
+                <span class="led led1"></span>
+                <span class="led led2"></span>
+                <span class="led led3"></span>
+                `
+                : `
+                <span class="led red"></span>
+                <span class="led red"></span>
+                <span class="led red"></span>
+                `}
+          </div>
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal('${id}')">&times;</span>
+          <h2>Panasonic ATSlar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("Panasonic ATSlarni olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+//Exactly one BS about
+async function openDeviceDetail(id) {
+  try {
+    const res = await fetch(`/api/pats/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal13');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal('myModal13')">&times;</span>
+      <h2>${dev.name}</h2>
+      <p><strong>IP manzil:</strong> ${dev.ip_address}</p>
+      <p><strong>Hudud:</strong> ${dev.region}</p>
+      <p><strong>Holat:</strong> ${dev.is_active ? 'Aktiv' : 'Noaktiv'}</p>
+      <p><strong>So‘nggi tekshiruv:</strong> ${dev.last_checked}</p>
+      <p><strong>Tur:</strong> ${dev.type}</p>
+      <button onclick="openCustomModal('myModal13')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("pats detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+//================================================Ending PATS in top list with modals==================================================
+
+
+
+//================================================Begining gats in top list with modals==================================================
+async function openCustomModal2(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // Faqat BazaStansiya modali uchun
+  if (id === 'myModal14') {
+    try {
+      const res = await fetch(`/api/gatslar/${currentRegion}/`);
+      const devices = await res.json();
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal2('${id}')">&times;</span>
+          <h2>Grandstream ATSlar</h2>
+          <p class="muted" style="text-align:center;">Hech qanday Grandstream ATS topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail2(${d.id})" style="padding:15px;border-bottom:1px solid #eee;cursor:pointer; margin:7px 0px;">
+            <strong>${d.name}</strong>
+            <span class="muted" style="background-color:yellow; color:black; border-radius:5px; padding:3px; margin:0px 10px;">${d.ip_address}</span>
+            ${d.is_active
+                ? `
+                <span class="led led1"></span>
+                <span class="led led2"></span>
+                <span class="led led3"></span>
+                `
+                : `
+                <span class="led red"></span>
+                <span class="led red"></span>
+                <span class="led red"></span>
+                `}
+          </div>
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal2('${id}')">&times;</span>
+          <h2>Grandstream ATSlar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("Grandstream ATSlarni olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+//Exactly one BS about
+async function openDeviceDetail2(id) {
+  try {
+    const res = await fetch(`/api/bazastansiya/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal14');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal2('myModal14')">&times;</span>
+      <h2>${dev.name}</h2>
+      <p><strong>IP manzil:</strong> ${dev.ip_address}</p>
+      <p><strong>Hudud:</strong> ${dev.region}</p>
+      <p><strong>Holat:</strong> ${dev.is_active ? 'Aktiv' : 'Noaktiv'}</p>
+      <p><strong>So‘nggi tekshiruv:</strong> ${dev.last_checked}</p>
+      <p><strong>Tur:</strong> ${dev.type}</p>
+      <button onclick="openCustomModal2('myModal14')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("gaTS detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+
+//================================================Ending gats in top list with modals==================================================
+
+
+
+
+//================================================Begining vlan in top list with modals==================================================
+async function openCustomModal3(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // Faqat BazaStansiya modali uchun
+  if (id === 'myModal15') {
+    try {
+      const res = await fetch(`/api/vlanlar/${currentRegion}/`);
+      const devices = await res.json();
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal3('${id}')">&times;</span>
+          <h2>VLANlar</h2>
+          <p class="muted" style="text-align:center;">Hech qanday VLANlar topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail3(${d.id})" style="padding:15px;border-bottom:1px solid #eee;cursor:pointer; margin:7px 0px;">
+            <strong>${d.name}</strong>
+            <span class="muted"  style="background-color:yellow; color:black; border-radius:5px; padding:3px; margin:0px 10px;">${d.ip_address}</span>
+           ${d.is_active
+                ? `
+                <span class="led led1"></span>
+                <span class="led led2"></span>
+                <span class="led led3"></span>
+                `
+                : `
+                <span class="led red"></span>
+                <span class="led red"></span>
+                <span class="led red"></span>
+                `}
+          </div>
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal3('${id}')">&times;</span>
+          <h2>VLANlar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("VLANlarni olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+//Exactly one BS about
+async function openDeviceDetail3(id) {
+  try {
+    const res = await fetch(`/api/vlan/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal15');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal3('myModal15')">&times;</span>
+      <h2>${dev.name}</h2>
+      <p><strong>IP manzil:</strong> ${dev.ip_address}</p>
+      <p><strong>Hudud:</strong> ${dev.region}</p>
+      <p><strong>Holat:</strong> ${dev.is_active ? 'Aktiv' : 'Noaktiv'}</p>
+      <p><strong>So‘nggi tekshiruv:</strong> ${dev.last_checked}</p>
+      <p><strong>Tur:</strong> ${dev.type}</p>
+      <button onclick="openCustomModal3('myModal15')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("gaTS detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+
+//================================================Ending vlan in top list with modals==================================================
+
+
+
+//================================================Begining dutys in top list with modals==================================================
+async function openCustomModal4(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // only duty list
+  if (id === 'myModal16') {
+    try {
+      const res = await fetch(`/api/dutylar/${currentRegion}/`);
+      const devices = await res.json();
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal4('${id}')">&times;</span>
+          <h2 style="text-align:center;">Bugungi navbatchilar</h2>
+          <p class="muted">Hech nima topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail4(${d.user_outlook_id})" style="padding:6px;cursor:pointer;height:890px;">
+          <p align="center" style="font-weight:bold;font-size:24px;background-color:blue;border-radius:3px;color:black;">${d.m_unit}</p>
+
+          <div>
+            <p style="margin-left:4px;"><span style="background-color:yellow;border-radius:3px;color:black;margin-right:5px;padding-left:3px;margin-left:3px;">1. </span> Outlook navbatchisi - <strong>${d.user_outlook_last_name} ${d.user_outlook_first_name}</strong></p>
+            {#<span class="muted">${d.user_outlook_name} </span>#}
+            {#${d.is_active ? '<span style="color:yellow"> ●</span>' : '<span style="color:red"> ●</span>'}#}
+          </div>
+
+          <div onclick="openDeviceDetail4(${d.user_outlook_id})" style="padding:6px;cursor:pointer">
+            <p><span style="background-color:yellow;border-radius:3px;color:black;margin-right:5px;padding-left:3px;">2. </span> Telefon navbatchisi - <strong>${d.user_phone_last_name} ${d.user_phone_first_name}</strong></p>
+            {#<span class="muted">${d.user_phone_id}</span>#}
+            {#${d.is_active ? '<span style="color:yellow"> ●</span>' : '<span style="color:red"> ●</span>'}#}
+          </div>
+
+          <div onclick="openDeviceDetail4(${d.user_radio_id})" style="padding:6px;border-bottom:1px solid #eee;cursor:pointer">
+            <p><span style="background-color:yellow;border-radius:3px;color:black;margin-right:5px;padding-left:3px;">3. </span>  Radio navbatchisi - <strong>${d.user_radio_last_name} ${d.user_radio_first_name}</strong></p>
+            {#<span class="muted">${d.user_radio_id}</span>#}
+            {#${d.is_active ? '<span style="color:yellow"> ●</span>' : '<span style="color:red"> ●</span>'}#}
+          </div>
+
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal4('${id}')">&times;</span>
+          <h2 style="text-align:center;padding-top:12px;">Bugungi navbatchilar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("Navbatchilarni olishda olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+
+//Exactly one BS about
+async function openDeviceDetail4(id) {
+  try {
+    const res = await fetch(`/api/duty/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal16');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal4('myModal16')">&times;</span>
+      <h2>${dev.m_unit}</h2>
+      <center><img src="${dev.photo}" width="200"></center>
+      <br>
+      <br>
+       <p>Navbatchini baholang</p>
+       <form method="post" action="?user_id=${dev.id}">
+       {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Baholash</button>
+       </form>
+      <button onclick="openCustomModal4('myModal16')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("gaTS detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+
+//================================================Ending dutys in top list with modals==================================================
+
+
+
+
+
+
+
+
+//================================================Begining firewall in top list with modals==================================================
+async function openCustomModal5(id, regionId='all') {
+  const modal = document.getElementById(id);
+  const content = modal.querySelector('.custom-modal-content');
+  // Faqat firewall modali uchun
+  if (id === 'myModal18') {
+    try {
+      const res = await fetch(`/api/firewalls/${currentRegion}/`);
+      const devices = await res.json();
+       console.log('info=',devices);
+      if (devices.length === 0) {
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal5('${id}')">&times;</span>
+          <h2>Firewall va Mikrotiklar</h2>
+          <p class="muted" style="text-align:center;">Hech qanday  firewall va mikrotik topilmadi.</p>
+        `;
+      } else {
+        const listHtml = devices.map(d => `
+          <div onclick="openDeviceDetail5(${d.id})" style="padding:15px;border-bottom:1px solid #eee;cursor:pointer; margin:7px 0px;">
+            <strong>${d.name}</strong>
+            <span class="muted"  style="background-color:yellow; color:black; border-radius:5px; padding:3px; margin:0px 10px;">${d.ip_address}</span>
+           ${d.is_active
+                ? `
+                <span class="led led1"></span>
+                <span class="led led2"></span>
+                <span class="led led3"></span>
+                `
+                : `
+                <span class="led red"></span>
+                <span class="led red"></span>
+                <span class="led red"></span>
+                `}
+          </div>
+        `).join('');
+        content.innerHTML = `
+          <span class="custom-modal-close" onclick="closeCustomModal5('${id}')">&times;</span>
+          <h2>Firewall va Mikrotiklar</h2>
+          <div style="overflow-y:auto">${listHtml}</div>
+        `;
+      }
+    } catch (err) {
+      console.error("Firewall va Mikrotiklarni olishda xatolik:", err);
+      content.innerHTML = `<p style="color:red">Ma’lumotni olishda xatolik yuz berdi.</p>`;
+    }
+  }
+  modal.style.display = 'flex';
+}
+
+//Exactly one BS about
+async function openDeviceDetail5(id) {
+  try {
+    const res = await fetch(`/api/firewall/${id}/`);
+    const dev = await res.json();
+    const modal = document.getElementById('myModal18');
+    const content = modal.querySelector('.custom-modal-content');
+    content.innerHTML = `
+      <span class="custom-modal-close" onclick="openCustomModal5('myModal15')">&times;</span>
+      <h2>${dev.name}</h2>
+      <p><strong>IP manzil:</strong> ${dev.ip_address}</p>
+      <p><strong>Hudud:</strong> ${dev.region}</p>
+      <p><strong>Holat:</strong> ${dev.is_active ? 'Aktiv' : 'Noaktiv'}</p>
+      <p><strong>So‘nggi tekshiruv:</strong> ${dev.last_checked}</p>
+      <p><strong>Tur:</strong> ${dev.type}</p>
+      <button onclick="openCustomModal5('myModal18')" class="btn secondary">⬅️ Orqaga</button>
+    `;
+  } catch (err) {
+    console.error("firewall detallarini olishda xatolik:", err);
+    alert('Ma’lumotni yuklashda xatolik!');
+  }
+}
+
+//================================================Ending firewall in top list with modals==================================================
+
+
+</script>
+</body>
+</html> 

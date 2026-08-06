@@ -1,0 +1,393 @@
+<!--{% load static %}-->
+<!--<html lang="en">-->
+<!--  <head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>Навбатчилик маркази</title>-->
+<!--    <link rel="stylesheet" href="{% static 'css/style_1.css' %}" />-->
+<!--    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />-->
+<!--  </head>-->
+<!--  <body>-->
+<!--    <div class="app-container">-->
+<!--      <div class="sidebar">-->
+<!--         <div class="sidebar-head">-->
+<!--              <img src="{% static 'img/sidebar-icon.png' %}" alt="">-->
+<!--              {{ request.user.username}}-->
+<!--         </div>-->
+<!--         -->
+<!--        <div class="sidebar-box">-->
+<!--          <p>Havolalar</p>-->
+<!--          <ul>-->
+<!--              <li>-->
+<!--                <a href="{% url 'index' %}">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Monitoring</a>-->
+<!--              </li>-->
+<!--                <li>-->
+<!--                <a href="{% url 'events' %}">-->
+<!--                  <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">-->
+<!--  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>-->
+<!--  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>-->
+<!--</svg> </span>-->
+<!--                  Tadbirlar</a>-->
+<!--              </li>-->
+<!--                <li>-->
+<!--                <a href="{% url 'phones' %}" class="active">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Telefon raqamlar</a>-->
+<!--              </li>-->
+<!--              <li>-->
+<!--                <a href="{% url 'dutys' %}">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Navbatchilar jadvali</a>-->
+<!--              </li>-->
+<!--          </ul>   -->
+<!--        </div>-->
+<!--      </div>-->
+<!--        <div class="main-content">-->
+<!--              <div class="main-container">-->
+<!--                  <div class="row">-->
+<!--                     <div class="col-12">-->
+<!--                        <div class="section-head-text">-->
+<!--                             <h3>MIlliy Gvardiya Shaxsiy Tarkibi Telefon Raqamlari</h3>-->
+<!--                        </div>-->
+<!--                     </div>-->
+<!--                  </div>-->
+<!--                  <div class="row">-->
+<!--                      <div class="col-12">-->
+<!--                           <div class="phone-search mb-3">-->
+<!--                                <input type="text" id="searchInput" placeholder="Qidirish..." class="form-control" onkeyup="searchTable()">-->
+<!--                            </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-12">-->
+<!--                          -->
+<!--                           <div class="table-responsive-xl" style="max-height: 80vh; overflow-y: auto;  border: 1px solid #ccc; border-radius: 8px;">-->
+<!--    <table id="phoneTable" class="table table-bordered table-hover table-striped text-center align-middle">-->
+<!--        <thead class="table-success sticky-top">-->
+<!--            <tr>-->
+<!--                <th>#</th>-->
+<!--                <th>Familiyasi, Ism va sharifi</th>-->
+<!--                <th>Panasonic</th>-->
+<!--                <th>Grandstream</th>-->
+<!--                <th>ZAS</th>-->
+<!--                <th>Shahar telefon raqamlari</th>-->
+<!--                <th>Mobil telefon raqamlari</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            {% regroup phones by department as department_list %}-->
+<!--            {% for group in department_list %}-->
+<!--                <tr class="table-success text-center fw-bold department-row">-->
+<!--                    <td colspan="7">{{ group.grouper.name }}</td>-->
+<!--                </tr>-->
+<!--                {% for i in group.list %}-->
+<!--                    <tr>-->
+<!--                        <td>{{ forloop.counter }}</td>-->
+<!--                        <td>{{ i.fio }}</td>-->
+<!--                        <td>{{ i.panasonic_number }}</td>-->
+<!--                        <td>{{ i.grandstream_number }}</td>-->
+<!--                        <td>{{ i.zas_number }}</td>-->
+<!--                        <td>{{ i.city_number }}</td>-->
+<!--                        <td>{{ i.mobile_number }}</td>-->
+<!--                    </tr>-->
+<!--                {% endfor %}-->
+<!--            {% endfor %}-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+
+
+
+<!--                      </div>-->
+<!--                  </div>-->
+<!--              </div>-->
+<!--        </div>-->
+
+
+
+
+
+<!--    -->
+<!--       -->
+
+<!--         -->
+<!--      -->
+
+<!--    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>-->
+<!--    <script>-->
+
+<!-- function searchTable() {-->
+<!--    let input = document.getElementById("searchInput").value.toLowerCase();-->
+<!--    let table = document.getElementById("phoneTable");-->
+<!--    let rows = table.getElementsByTagName("tr");-->
+<!--    let depRows = document.querySelectorAll(".department-row");-->
+
+<!--    // Avval barcha department satrlarini yashiramiz-->
+<!--    depRows.forEach(dep => dep.style.display = "none");-->
+
+<!--    let lastDep = null;-->
+<!--    for (let i = 0; i < rows.length; i++) {-->
+<!--        let row = rows[i];-->
+<!--        if (row.classList.contains("department-row")) {-->
+<!--            lastDep = row; // Oxirgi departmentni eslab qolamiz-->
+<!--            continue;-->
+<!--        }-->
+
+<!--        let text = row.innerText.toLowerCase();-->
+<!--        if (text.includes(input)) {-->
+<!--            row.style.display = "";-->
+<!--            if (lastDep) lastDep.style.display = ""; // Department ham ko‘rinsin-->
+<!--        } else {-->
+<!--            row.style.display = "none";-->
+<!--        }-->
+<!--    }-->
+<!--}-->
+<!--    </script> -->
+<!--  </body>-->
+<!--</html>-->
+
+
+
+
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Навбатчилик маркази</title>
+    <link rel="stylesheet" href="{% static 'css/style_1.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+  </head>
+  <style>
+/* To'q ko'k (Dark Theme — #0f172a) dizayn stillari */
+body, .main-content, .app-container, .main-container {
+  background-color: #0f172a !important; /* Asosiy to'q ko'k fon */
+  color: #f8fafc !important;             /* Och rangdagi matn */
+}
+
+/* Sidebar (Yon panel) */
+.sidebar {
+  background-color: #020617 !important;  /* Birmuncha chuqurroq to'q fon */
+  border-right: 1px solid #1e293b !important;
+}
+
+.sidebar-head {
+  color: black !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.sidebar-box p {
+  color: #fff !important;
+}
+
+.sidebar-box a {
+  color: #cbd5e1 !important;
+}
+
+.sidebar-box a:hover, .sidebar-box a.active {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+}
+
+.section-head-text h3 {
+  color: black !important;
+}
+
+/* Qidirish maydoni (Input) */
+.phone-search input, .form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px;
+}
+
+.phone-search input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.phone-search input:focus, .form-control:focus {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25) !important;
+}
+
+/* Jadval va uning konteyneri */
+.table-responsive-xl {
+  background-color: #0f172a !important;
+  border: 1px solid #1e293b !important;
+}
+
+.table, .table-bordered, .table-hover, .table-striped {
+  --bs-table-bg: #0f172a !important;
+  --bs-table-color: #f8fafc !important;
+  --bs-table-border-color: #1e293b !important;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* Jadval sarlavhasi (thead) va Bo'lim satrlari (Department row) */
+.table thead.table-success th,
+.table tr.department-row,
+.table tr.department-row td {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important; /* Moviy tusli ajratuvchi matn */
+  border-color: #334155 !important;
+}
+
+/* Jadval qatorlari */
+.table tbody tr {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.table tbody tr:hover,
+.table-hover tbody tr:hover {
+  background-color: #1e293b !important; /* Sichqoncha olib kelingandagi fon */
+  color: #ffffff !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+  --bs-table-bg-type: #0f172a !important;
+  color: #f8fafc !important;
+}
+</style>
+
+  <body>
+    <div class="app-container">
+      <div class="sidebar">
+         <div class="sidebar-head">
+              <img src="{% static 'img/sidebar-icon.png' %}" alt="">
+              {{ request.user.username}}
+         </div>
+
+        <div class="sidebar-box">
+          <ul>
+              <li>
+                <a href="{% url 'index' %}">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Monitoring</a>
+              </li>
+                <li>
+                <a href="{% url 'events' %}">
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+</svg> </span>
+                  Tadbirlar</a>
+              </li>
+                <li>
+                <a href="{% url 'phones' %}" class="active">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Telefon raqamlar</a>
+              </li>
+              <li>
+                <a href="{% url 'dutys' %}">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Navbatchilar jadvali</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+        <div class="main-content">
+              <div class="main-container">
+                  <div class="row">
+                     <div class="col-12">
+                        <div class="section-head-text">
+                             <h3>Milliy Gvardiya Shaxsiy Tarkibi Telefon Raqamlari</h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-12">
+                           <div class="phone-search mb-3">
+                                <input type="text" id="searchInput" placeholder="Qidirish..." class="form-control" onkeyup="searchTable()">
+                            </div>
+                      </div>
+                      <div class="col-12">
+
+                           <div class="table-responsive-xl" style="max-height: 80vh; overflow-y: auto; border: 1px solid #1e293b; border-radius: 8px;">
+    <table id="phoneTable" class="table table-bordered table-hover table-striped text-center align-middle">
+        <thead class="table-success sticky-top">
+            <tr>
+                <th>#</th>
+                <th>Familiyasi, Ism va sharifi</th>
+                <th>Panasonic</th>
+                <th>Grandstream</th>
+                <th>ZAS</th>
+                <th>Shahar telefon raqamlari</th>
+                <th>Mobil telefon raqamlari</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% regroup phones by department as department_list %}
+            {% for group in department_list %}
+                <tr class="table-success text-center fw-bold department-row">
+                    <td colspan="7">{{ group.grouper.name }}</td>
+                </tr>
+                {% for i in group.list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.fio }}</td>
+                        <td>{{ i.panasonic_number }}</td>
+                        <td>{{ i.grandstream_number }}</td>
+                        <td>{{ i.zas_number }}</td>
+                        <td>{{ i.city_number }}</td>
+                        <td>{{ i.mobile_number }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+                      </div>
+                  </div>
+              </div>
+        </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+ function searchTable() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let table = document.getElementById("phoneTable");
+    let rows = table.getElementsByTagName("tr");
+    let depRows = document.querySelectorAll(".department-row");
+
+    // Avval barcha department satrlarini yashiramiz
+    depRows.forEach(dep => dep.style.display = "none");
+
+    let lastDep = null;
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+        if (row.classList.contains("department-row")) {
+            lastDep = row; // Oxirgi departmentni eslab qolamiz
+            continue;
+        }
+
+        let text = row.innerText.toLowerCase();
+        if (text.includes(input)) {
+            row.style.display = "";
+            if (lastDep) lastDep.style.display = ""; // Department ham ko‘rinsin
+        } else {
+            row.style.display = "none";
+        }
+    }
+}
+    </script>
+  </body>
+</html>

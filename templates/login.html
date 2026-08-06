@@ -1,0 +1,28 @@
+{% load static %}
+<html lang="uz">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>E-navbatchi</title>
+  <style>
+    body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#fff;font-family:Arial;}
+    .box{background:#0b1220;padding:32px;border-radius:10px;width:360px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+    input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:none;background:#111827;color:#fff}
+    button{width:100%;padding:10px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:600}
+    .error{color:#fb7185;margin-bottom:8px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="box-image" style="display:flex;justify-content:center;margin-bottom:10px;"><img src="{% static 'img/gvardiya.png' %}" alt="Gvardiya icon" width="200" style=""></div>
+    <h2 style="margin:0 0 8px 0;text-align:center;font-family:Times New Roman;">Tizimga kirish</h2>
+    {% if info %}<div class="error">{{ info }}</div>{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="login" required />
+      <input type="password" name="password" placeholder="parol" required />
+      <button type="submit">kirish</button>
+    </form>
+  </div>
+</body>
+</html>

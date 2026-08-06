@@ -1,0 +1,853 @@
+<!--{% load static %}-->
+<!--<html lang="en">-->
+<!--  <head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>Навбатчилик маркази</title>-->
+<!--    <link rel="stylesheet" href="{% static 'css/style_1.css' %}" />-->
+<!--    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">-->
+<!--    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />-->
+<!--  </head>-->
+<!--  <style>-->
+<!--.message-container {-->
+<!--  position: fixed;-->
+<!--  top: 50%;-->
+<!--  left: 50%;-->
+<!--  transform: translate(-50%, -50%);-->
+<!--  z-index: 2000;-->
+<!--  width: auto;-->
+<!--  background: rgba(255, 255, 255, 0.9);-->
+<!--  border-radius: 12px;-->
+<!--  padding: 10px 20px;-->
+<!--  animation: fadeInOut 3s forwards;-->
+<!--}-->
+
+<!--@keyframes fadeInOut {-->
+<!--  0% { opacity: 0; transform: translate(-50%, -60%); }-->
+<!--  10% { opacity: 1; transform: translate(-50%, -50%); }-->
+<!--  90% { opacity: 1; }-->
+<!--  100% { opacity: 0; transform: translate(-50%, -40%); }-->
+<!--}-->
+<!--</style>-->
+
+<!--  <body>-->
+<!--    {% if messages %}-->
+<!--  <div class="message-container">-->
+<!--    {% for message in messages %}-->
+<!--      <div class="alert alert-success alert-dismissible fade show text-center" role="alert">-->
+<!--        {{ message }}-->
+<!--      </div>-->
+<!--    {% endfor %}-->
+<!--  </div>-->
+<!--{% endif %}-->
+
+<!--    <div class="app-container">-->
+<!--      <div class="sidebar">-->
+<!--         <div class="sidebar-head">-->
+<!--             <img src="{% static 'img/sidebar-icon.png' %}" alt="">-->
+<!--              {{ request.user.username}}-->
+<!--         </div>-->
+<!--         -->
+<!--        <div class="sidebar-box">-->
+<!--          <p>Havolalar</p>-->
+<!--          <ul>-->
+<!--              <li>-->
+<!--                 <a href="{% url 'index' %}">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Monitoring</a>-->
+<!--              </li>-->
+<!--                <li>-->
+<!--                <a href="{% url 'events' %}" class="active">-->
+<!--                  <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">-->
+<!--  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>-->
+<!--  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>-->
+<!--</svg> </span>-->
+<!--                  Tadbirlar</a>-->
+<!--              </li>-->
+<!--               <li>-->
+<!--                <a href="{% url 'phones' %}">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Telefon raqamlar</a>-->
+<!--              </li>-->
+<!--               <li>-->
+<!--                <a href="{% url 'dutys' %}">-->
+<!--                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">-->
+<!--  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>-->
+<!--</svg></span>-->
+<!--                  Navbatchilar jadvali</a>-->
+<!--              </li>-->
+<!--          </ul>   -->
+<!--        </div>-->
+<!--      </div>-->
+<!--        <div class="main-content">-->
+<!--              <div class="main-container">-->
+<!--                  <div class="row">-->
+<!--                     <div class="col-12">-->
+<!--                        <div class="section-head-text">-->
+<!--                             <h3>MIlliy Gvardiya Aloqa Tuzulmalar Monitoringi Dasturiy Tizimi.</h3>-->
+<!--                        </div>-->
+<!--                     </div>-->
+
+<!--                     <div class="col-12">-->
+<!--                         <div class="scrol-table-box">-->
+<!--  <table class="table table-primary p-3">-->
+<!--      <thead>-->
+<!--    <tr>-->
+<!--      <th scope="col">#</th>-->
+<!--      <th scope="col">Tadbir nomi</th>-->
+<!--      <th scope="col">-->
+<!--        <div class="event-create-box">-->
+<!--            <button -->
+<!--            class="btn btn-primary"  -->
+<!--              data-bs-toggle="modal"-->
+<!--                  data-bs-target="#create-event"-->
+<!--                  data-bs-whatever="@fat">-->
+<!--               <span>-->
+<!--                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">-->
+<!--  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>-->
+<!--  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>-->
+<!--</svg>-->
+<!--               </span> Yaratish-->
+<!--          </button>-->
+<!--        </div>-->
+<!--        -->
+<!--      </th>-->
+<!--    </tr>-->
+<!--  </thead>-->
+<!--  <tbody>-->
+
+<!--{% for t in events_nd %}-->
+<!--<tr>-->
+<!--  <th scope="row">{{ forloop.counter }}</th>-->
+<!--  <td>{{ t.theme }}</td>-->
+<!--  <td class="table-td-btn">-->
+<!--    <div class="table-btn-box">-->
+<!--      <button-->
+<!--   type="button"-->
+<!--      class="btn btn-warning"-->
+<!--      data-bs-toggle="modal"-->
+<!--      data-bs-target="#eventModal"-->
+<!--      data-theme="{{ t.theme }}"-->
+<!--      data-body="{{ t.main_body }}"-->
+<!--      data-user="{{ t.user.username }}"-->
+<!--      data-time="{{ t.timestamp }}"-->
+<!--      {% if t.photo %}-->
+<!--        data-image="{{ t.photo.url }}"-->
+<!--      {% else %}-->
+<!--        data-image="{% static 'img/tadbir.png' %}"-->
+<!--      {% endif %}-->
+<!--      >-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"-->
+<!--             fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">-->
+<!--          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>-->
+<!--          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8-->
+<!--                   3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>-->
+<!--        </svg>-->
+<!--        Batafsil-->
+<!--      </button>-->
+<!--<button-->
+<!--        type="button"-->
+<!--        class="btn btn-danger finish-btn"-->
+<!--        data-bs-toggle="modal"-->
+<!--        data-bs-target="#edit-event"-->
+<!--        data-id="{{ t.id }}"-->
+<!--        data-name="{{ t.theme }}"-->
+<!--                >-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-check-fill" viewBox="0 0 16 16">-->
+<!--  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5m-2.6 5.854a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>-->
+<!--</svg>-->
+<!--                  Tahrirlash-->
+<!--                </button>-->
+<!--    &lt;!&ndash; Tahrirlash uchun modal oyna &ndash;&gt;-->
+<!--                    <div-->
+<!--                        class="modal fade modal2"-->
+<!--                        id="edit-event"-->
+<!--                        tabindex="-1"-->
+<!--                        aria-labelledby="exampleModalLabel"-->
+<!--                        aria-hidden="true">-->
+
+<!--                        <div class="modal-dialog modal-dialog-centered modal-lg">-->
+<!--                            <div class="modal-content">-->
+<!--                              <div class="modal-header">-->
+<!--                                <h1 class="modal-title fs-5" id="exampleModalLabel">Tadbir tahrirlash</h1>-->
+<!--                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                              </div>-->
+<!--                              <div class="modal-body">-->
+<!--                                <div class="event-create-form">-->
+<!--                                     <form method="post" enctype="multipart/form-data" action="?edit={{ t.id }}">{% csrf_token %}-->
+<!--                                              {{form.as_p}}-->
+<!--                                              <button type="submit" class="btn btn-primary">tahrirlash</button>-->
+<!--                                     </form>-->
+<!--                                </div>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                   <button-->
+<!--                   type="button"-->
+<!--        class="btn btn-danger finish-btn"-->
+<!--        data-bs-toggle="modal"-->
+<!--        data-bs-target="#finishEventModal"-->
+<!--        data-id="{{ t.id }}"-->
+<!--        data-name="{{ t.theme }}"-->
+<!--                >-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-check-fill" viewBox="0 0 16 16">-->
+<!--  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5m-2.6 5.854a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>-->
+<!--</svg>-->
+<!--                  Tadbirni Tugatish-->
+<!--                </button>-->
+
+<!--    </div>-->
+<!--  </td>-->
+<!--</tr>-->
+<!--{% endfor %}-->
+
+<!--  </tbody>-->
+<!--         </table>-->
+<!--          </div>-->
+<!--                     </div>-->
+<!--                  </div>-->
+<!--                  -->
+<!--              </div>-->
+<!--{##}-->
+<!--{#            &lt;!&ndash; PDF bo'lib yuklanadigan ma'lumot &ndash;&gt;#}-->
+<!--{#<div id="content-to-pdf" class="border p-4 rounded bg-white shadow-sm" style="display: none;">#}-->
+<!--{#    <h2 id="report-title" class="text-center mb-4 text-primary fw-bold">O'zbekiston Eron futbol o'yinini o'tkazish tadbiri</h2>#}-->
+<!--{#    <p id="report-text" class="fs-5 text-secondary">#}-->
+<!--{#    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero asperiores ipsum impedit sunt ea porro earum, temporibus aliquid voluptatum, quam dolorum velit obcaecati molestias.  Tadbir 2025-yilning 10-oktabrdan boshlab 14-oktabrgacha davom etadi. Ushbu tadbirda kimlar qatnashishi kiritiladi. nima haqidaligi#}-->
+<!--{#      <span>Tadbir yaratuvchisi : serjant Sadullayev F.R</span>#}-->
+<!--{#      <span>Tadbir yaratilgan vaqt : 03.10.2025 11:56</span>#}-->
+<!--{#      <span>Tadbirga qoldirilgan izoh :Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, cum!</span>#}-->
+<!--{#                    <p class="mt-4"><strong>Sana:</strong> <span id="report-date"></span></p>#}-->
+<!--{#</div>#}-->
+<!--{##}-->
+
+<!--                 &lt;!&ndash; Tadbir yaratish uchun modal oyna &ndash;&gt;-->
+<!--                    <div-->
+<!--                        class="modal fade modal2"-->
+<!--                        id="create-event"-->
+<!--                        tabindex="-1"-->
+<!--                        aria-labelledby="exampleModalLabel"-->
+<!--                        aria-hidden="true">-->
+
+<!--                        <div class="modal-dialog modal-dialog-centered modal-lg">-->
+<!--                            <div class="modal-content">-->
+<!--                              <div class="modal-header">-->
+<!--                                <h1 class="modal-title fs-5" id="exampleModalLabel">Tadbir yaratish</h1>-->
+<!--                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                              </div>-->
+<!--                              <div class="modal-body">-->
+<!--                                <div class="event-create-form">-->
+<!--                                     <form method="post" enctype="multipart/form-data">{% csrf_token %}-->
+<!--                                              {{form.as_p}}-->
+<!--                                              <button type="submit" class="btn btn-primary">saqlash</button>-->
+<!--                                     </form>-->
+<!--                                </div>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                 &lt;!&ndash; Tadbirni batafsil ko'rish uchun modal &ndash;&gt;-->
+<!-- <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">-->
+<!--  <div class="modal-dialog modal-dialog-centered modal-lg">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h1 class="modal-title fs-5">Tadbir haqida</h1>-->
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <h5 id="modal-theme"></h5>-->
+<!--        <img id="modal-image" class="event-modal-img" src="{% static 'img/tadbir.png' %}" alt="">-->
+<!--        <p id="modal-body"></p>-->
+<!--        <div><h6>Tadbir yaratuvchisi:</h6><p id="modal-user"></p></div>-->
+<!--        <div><h6>Tadbir yaratilgan vaqt:</h6><p id="modal-time"></p></div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--      &lt;!&ndash; Tadbirni tugatish modal &ndash;&gt;-->
+<!--    <div class="modal fade" id="finishEventModal" tabindex="-1" aria-hidden="true">-->
+<!--  <div class="modal-dialog">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header bg-danger text-white">-->
+<!--        <h5 class="modal-title">Tadbirni tugatish</h5>-->
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>-->
+<!--      </div>-->
+
+<!--      <div class="modal-body">-->
+<!--        <p class="mb-0">Rostan ham ushbu tadbirni tugatmoqchimisiz?</p>-->
+<!--      </div>-->
+
+<!--      <div class="modal-footer">-->
+<!--        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>-->
+
+<!--        <form id="finishEventForm" method="POST" action="">-->
+<!--          {% csrf_token %}-->
+<!--          <input type="hidden" name="event_id" id="modalEventId">-->
+<!--          <input type="submit" value="Tugatish" class="btn btn-danger">-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--        </div>-->
+
+
+
+<!--     -->
+
+<!--    &lt;!&ndash; Bootstrap JS (bundle versiyasi kerak) &ndash;&gt;-->
+<!--<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>-->
+
+<!--&lt;!&ndash; jsPDF &ndash;&gt;-->
+<!--<script src="{% static 'js/jspdf.umd.min.js' %}"></script>-->
+
+<!--&lt;!&ndash; Universal script &ndash;&gt;-->
+<!--<script src="{% static 'js/script.js' %}"></script>-->
+<!--<script>-->
+
+<!-- const eventModal = document.getElementById("eventModal");-->
+
+<!--if (eventModal) {-->
+<!--  eventModal.addEventListener("show.bs.modal", function (event) {-->
+<!--    const button = event.relatedTarget;-->
+<!--    if (!button) return;-->
+
+<!--    const theme = button.getAttribute("data-theme") || "";-->
+<!--    const body = button.getAttribute("data-body") || "";-->
+<!--    const user = button.getAttribute("data-user") || "";-->
+<!--    const time = button.getAttribute("data-time") || "";-->
+<!--    const image = button.getAttribute("data-image") || "";-->
+
+<!--    const modalTheme = document.getElementById("modal-theme");-->
+<!--    const modalBody = document.getElementById("modal-body");-->
+<!--    const modalUser = document.getElementById("modal-user");-->
+<!--    const modalTime = document.getElementById("modal-time");-->
+<!--    const modalImage = document.getElementById("modal-image");-->
+
+<!--    if (modalTheme) modalTheme.textContent = theme;-->
+<!--    if (modalBody) modalBody.textContent = body;-->
+<!--    if (modalUser) modalUser.textContent = user;-->
+<!--    if (modalTime) modalTime.textContent = time;-->
+
+<!--    if (modalImage) {-->
+<!--      if (image && image !== "None") {-->
+<!--        modalImage.src = image;-->
+<!--      } else {-->
+<!--        // agar bazada rasm bo‘lmasa — default rasm-->
+<!--        modalImage.src = "/static/img/tadbir.png";-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+<!--}-->
+
+<!--  const modal23 = document.getElementById('finishEventModal');-->
+<!--  const eventIdInput = document.getElementById('modalEventId');-->
+<!--  const finishForm = document.getElementById('finishEventForm');-->
+
+<!--  // Har bir "Tadbirni tugatish" tugmasiga listener-->
+<!--  document.querySelectorAll('.finish-btn').forEach(btn => {-->
+<!--    btn.addEventListener('click', () => {-->
+<!--      const id = btn.getAttribute('data-id');-->
+<!--      const name = btn.getAttribute('data-name');-->
+
+<!--      // Modal ichiga qiymatni joylashtirish-->
+<!--      eventIdInput.value = id;-->
+<!--      finishForm.action = `/events/finish/${id}/`; // <&#45;&#45; Backend URL-->
+
+<!--      // (optional) Modal ichida nomini ham chiqarish:-->
+<!--      modal23.querySelector('.modal-body p').textContent =-->
+<!--        `Rostan ham "${name}" tadbirini tugatmoqchimisiz?`;-->
+<!--    });-->
+<!--  });-->
+
+<!--   setTimeout(() => {-->
+<!--    document.querySelectorAll('.alert').forEach(el => el.remove());-->
+<!--  }, 2000); // 3 soniyadan so‘ng yo‘qoladi-->
+<!--</script>-->
+
+<!--    </div>-->
+<!--  </body>-->
+<!--</html>-->
+
+
+
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Навбатчилик маркази</title>
+    <link rel="stylesheet" href="{% static 'css/style_1.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+  </head>
+  <style>
+/* To'q ko'k (Dark Theme — #0f172a) umumiy stillari */
+body, .main-content, .app-container, .main-container {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* Sidebar (Yon panel) */
+.sidebar {
+  background-color: #020617 !important;
+  border-right: 1px solid #1e293b !important;
+}
+
+.sidebar-head {
+  color: #f8fafc !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.sidebar-box p {
+  color: #94a3b8 !important;
+}
+
+.sidebar-box a {
+  color: #cbd5e1 !important;
+}
+
+.sidebar-box a:hover, .sidebar-box a.active {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+}
+
+.section-head-text h3 {
+  color: #f8fafc !important;
+}
+
+/* Bildirishnoma (Message Container) */
+.message-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  width: auto;
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 10px 20px;
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  10% { opacity: 1; transform: translate(-50%, -50%); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -40%); }
+}
+
+/* Jadval va konteyneri */
+.scrol-table-box {
+  background-color: #0f172a !important;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+}
+
+.table {
+  --bs-table-bg: #0f172a !important;
+  --bs-table-color: #f8fafc !important;
+  --bs-table-border-color: #1e293b !important;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.table thead th {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  border-bottom: 2px solid #334155 !important;
+}
+
+.table tbody tr {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.table tbody tr:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+/* Modallar (Modal windows) */
+.modal-content {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.modal-footer {
+  border-top: 1px solid #1e293b !important;
+}
+
+.btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Form elementlari (Form Control) */
+input, select, textarea, .form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  border-radius: 6px;
+}
+
+input:focus, select:focus, textarea:focus, .form-control:focus {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25) !important;
+}
+
+/* Alert moslashuvi */
+.alert-success {
+  background-color: #064e3b !important;
+  color: #a7f3d0 !important;
+  border-color: #047857 !important;
+}
+</style>
+
+  <body>
+    {% if messages %}
+  <div class="message-container">
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+    <div class="app-container">
+      <div class="sidebar">
+         <div class="sidebar-head">
+             <img src="{% static 'img/sidebar-icon.png' %}" alt="">
+              {{ request.user.username}}
+         </div>
+
+        <div class="sidebar-box">
+          <p>Havolalar</p>
+          <ul>
+              <li>
+                 <a href="{% url 'index' %}">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Monitoring</a>
+              </li>
+                <li>
+                <a href="{% url 'events' %}" class="active">
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+</svg> </span>
+                  Tadbirlar</a>
+              </li>
+               <li>
+                <a href="{% url 'phones' %}">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Telefon raqamlar</a>
+              </li>
+               <li>
+                <a href="{% url 'dutys' %}">
+                  <span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+</svg></span>
+                  Navbatchilar jadvali</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+        <div class="main-content">
+              <div class="main-container">
+                  <div class="row">
+                     <div class="col-12">
+                        <div class="section-head-text">
+                             <h3>Milliy Gvardiya Aloqa Tuzilmalari Monitoringi Dasturiy Tizimi</h3>
+                        </div>
+                     </div>
+
+                     <div class="col-12">
+                         <div class="scrol-table-box">
+  <table class="table p-3">
+      <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Tadbir nomi</th>
+      <th scope="col">
+        <div class="event-create-box">
+            <button
+            class="btn btn-primary"
+              data-bs-toggle="modal"
+                  data-bs-target="#create-event"
+                  data-bs-whatever="@fat">
+               <span>
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+</svg>
+               </span> Yaratish
+          </button>
+        </div>
+
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+
+{% for t in events_nd %}
+<tr>
+  <th scope="row">{{ forloop.counter }}</th>
+  <td>{{ t.theme }}  {% if t.done %}<span style="background-color:green;border-radius:10px;padding:3px;"> Tugatildi</span>{% else %}
+      <span style="background-color:red;border-radius:10px;padding:3px;">Jarayonda</span>{% endif %}</td>
+  <td class="table-td-btn">
+    <div class="table-btn-box">
+      <button
+   type="button"
+      class="btn btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#eventModal"
+      data-bs-target="#eventModal"
+      data-theme="{{ t.theme }}"
+      data-body="{{ t.main_body }}"
+      data-user="{{ t.user.username }}"
+      data-time="{{ t.timestamp }}"
+      {% if t.photo %}
+        data-image="{{ t.photo.url }}"
+      {% else %}
+        data-image="{% static 'img/tadbir.png' %}"
+      {% endif %}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+             fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8
+                   3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+        </svg>
+        Batafsil
+      </button>
+
+
+        {% if not t.done %}
+<button
+        type="button"
+        class="btn btn-danger finish-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#edit-event"
+        data-id="{{ t.id }}"
+        data-name="{{ t.theme }}"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-check-fill" viewBox="0 0 16 16">
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5m-2.6 5.854a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+</svg>
+                  Tahrirlash
+                </button>
+
+        {% endif %}
+    <!-- Tahrirlash uchun modal oyna -->
+                    <div
+                        class="modal fade modal2"
+                        id="edit-event"
+                        tabindex="-1"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Tadbir tahrirlash</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="event-create-form">
+                                     <form method="post" enctype="multipart/form-data" action="?edit={{ t.id }}">{% csrf_token %}
+                                              {{form.as_p}}
+                                              <button type="submit" class="btn btn-primary mt-2">Tahrirlash</button>
+                                     </form>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+        {% if not t.done %}
+                   <button
+                   type="button"
+        class="btn btn-danger finish-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#finishEventModal"
+        data-id="{{ t.id }}"
+        data-name="{{ t.theme }}"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-check-fill" viewBox="0 0 16 16">
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5m-2.6 5.854a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+</svg>
+                  Tadbirni Tugatish
+                </button>
+        {% endif %}
+
+    </div>
+  </td>
+</tr>
+{% endfor %}
+
+  </tbody>
+         </table>
+          </div>
+                     </div>
+                  </div>
+
+              </div>
+
+                 <!-- Tadbir yaratish uchun modal oyna -->
+                    <div
+                        class="modal fade modal2"
+                        id="create-event"
+                        tabindex="-1"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Tadbir yaratish</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="event-create-form">
+                                     <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                              {{form.as_p}}
+                                              <button type="submit" class="btn btn-primary mt-2">Saqlash</button>
+                                     </form>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+                 <!-- Tadbirni batafsil ko'rish uchun modal -->
+ <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Tadbir haqida</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <h5 id="modal-theme"></h5>
+        <img id="modal-image" class="event-modal-img img-fluid my-2" src="{% static 'img/tadbir.png' %}" alt="">
+        <p id="modal-body"></p>
+        <div><h6>Tadbir yaratuvchisi:</h6><p id="modal-user"></p></div>
+        <div><h6>Tadbir yaratilgan vaqt:</h6><p id="modal-time"></p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- Tadbirni tugatish modal -->
+    <div class="modal fade" id="finishEventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Tadbirni tugatish</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-0">Rostan ham ushbu tadbirni tugatmoqchimisiz?</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+
+        <form id="finishEventForm" method="POST" action="">
+          {% csrf_token %}
+          <input type="hidden" name="event_id" id="modalEventId">
+          <input type="submit" value="Tugatish" class="btn btn-danger">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+
+    <!-- Bootstrap JS -->
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- jsPDF -->
+<script src="{% static 'js/jspdf.umd.min.js' %}"></script>
+<!-- Universal script -->
+<script src="{% static 'js/script.js' %}"></script>
+<script>
+ const eventModal = document.getElementById("eventModal");
+
+if (eventModal) {
+  eventModal.addEventListener("show.bs.modal", function (event) {
+    const button = event.relatedTarget;
+    if (!button) return;
+
+    const theme = button.getAttribute("data-theme") || "";
+    const body = button.getAttribute("data-body") || "";
+    const user = button.getAttribute("data-user") || "";
+    const time = button.getAttribute("data-time") || "";
+    const image = button.getAttribute("data-image") || "";
+
+    const modalTheme = document.getElementById("modal-theme");
+    const modalBody = document.getElementById("modal-body");
+    const modalUser = document.getElementById("modal-user");
+    const modalTime = document.getElementById("modal-time");
+    const modalImage = document.getElementById("modal-image");
+
+    if (modalTheme) modalTheme.textContent = theme;
+    if (modalBody) modalBody.textContent = body;
+    if (modalUser) modalUser.textContent = user;
+    if (modalTime) modalTime.textContent = time;
+
+    if (modalImage) {
+      if (image && image !== "None") {
+        modalImage.src = image;
+      } else {
+        modalImage.src = "/static/img/tadbir.png";
+      }
+    }
+  });
+}
+
+  const modal23 = document.getElementById('finishEventModal');
+  const eventIdInput = document.getElementById('modalEventId');
+  const finishForm = document.getElementById('finishEventForm');
+
+  document.querySelectorAll('.finish-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+
+      eventIdInput.value = id;
+      finishForm.action = `/events/finish/${id}/`;
+
+      modal23.querySelector('.modal-body p').textContent =
+        `Rostan ham "${name}" tadbirini tugatmoqchimisiz?`;
+    });
+  });
+
+   setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => el.remove());
+  }, 2000);
+</script>
+
+    </div>
+  </body>
+</html>

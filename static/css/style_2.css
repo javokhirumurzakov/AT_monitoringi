@@ -1,0 +1,55 @@
+/*Platformaning responsive qismi platformaning */
+
+@media (max-width: 1600px) {
+  .sidebar .sidebar-head{
+    font-size: 18px;
+  }
+  .sidebar .sidebar-head img{
+    width: 23px;
+     height: 23px;
+}
+.sidebar-box ul li a{
+    font-size: 16px;
+}
+
+.sidebar-box svg{
+    width: 18px;
+    height: 18px;
+}
+.main-container .section-head-text h3{
+    font-size: 18px;
+}
+.create-event-box table td {
+  font-size: 16px;
+}
+.main-content table td, .main-content table th{
+  font-size: 16px;
+}
+}
+
+
+@media (max-width: 1200px) {
+  .sidebar .sidebar-head{
+    font-size: 16px;
+  }
+   .sidebar .sidebar-head img{
+    width: 20px;
+     height: 20px;
+}
+.sidebar-box ul li a{
+    font-size: 14px;
+}
+.sidebar-box svg{
+    width: 16px;
+    height: 16px;
+}
+.main-container .section-head-text h3{
+    font-size: 16px;
+}
+.create-event-box table td {
+  font-size: 14px;
+}
+.main-content table td, .main-content table th {
+  font-size: 14px;
+}
+}

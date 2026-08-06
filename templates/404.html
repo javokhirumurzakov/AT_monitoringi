@@ -1,0 +1,287 @@
+ <!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>404 — Sahifa topilmadi</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg1: #f9f9f9;
+        --bg2: #e8efe8;
+        --panel: #ffffff;
+        --accent: #2e5d38;
+        --muted: #6b7b6f;
+        --danger: #b33a3a;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+        color: #1c1c1c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .card-404 {
+        width: 100%;
+        max-width: 1100px;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 0;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      /* left panel */
+      .panel-left {
+        padding: 48px 40px;
+        position: relative;
+      }
+
+      .kicker {
+        display: inline-block;
+        background: linear-gradient(90deg, #b3d0b3, #e3f2dc);
+        color: #20402a;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 999px;
+        letter-spacing: 0.6px;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        font-size: 48px;
+        margin: 0 0 10px;
+        color: var(--accent);
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+
+      p.lead {
+        color: var(--muted);
+        margin-bottom: 22px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid rgba(46, 93, 56, 0.2);
+      }
+
+      .btn-ghost:hover {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      /* right visual */
+      .panel-right {
+        background: linear-gradient(180deg, #f7f9f7, #e6ede7);
+        padding: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .badge-stamp {
+        position: absolute;
+        top: 26px;
+        right: 26px;
+        transform: rotate(-12deg);
+        background: rgba(179, 58, 58, 0.08);
+        border: 2px solid rgba(179, 58, 58, 0.2);
+        color: var(--danger);
+        padding: 10px 18px;
+        font-weight: 700;
+        border-radius: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(2px);
+      }
+
+      .artboard {
+        width: 320px;
+        height: 280px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(46, 93, 56, 0.1),
+          rgba(90, 130, 90, 0.05)
+        );
+        border: 1px solid rgba(155, 191, 122, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* helicopter animation */
+      .heli {
+        position: absolute;
+        left: -40%;
+        top: 16%;
+        width: 320px;
+        height: 160px;
+        transform: translateX(0);
+        animation: heliFly 9s linear infinite;
+        opacity: 0.95;
+      }
+
+      .heli svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      @keyframes heliFly {
+        0% {
+          transform: translateX(-60%) translateY(0) rotate(-4deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        50% {
+          transform: translateX(60%) translateY(-6px) rotate(2deg);
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(160%) translateY(0) rotate(6deg);
+          opacity: 0;
+        }
+      }
+
+      .ground {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 48px;
+        background: linear-gradient(180deg, #e6ede7, #d6e1d6);
+        box-shadow: inset 0 6px 18px rgba(0, 0, 0, 0.05);
+      }
+
+      .scan-lines::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04) 0%,
+          transparent 50%,
+          rgba(0, 0, 0, 0.02) 100%
+        );
+        pointer-events: none;
+        mix-blend-mode: overlay;
+      }
+
+      @media (max-width: 900px) {
+        .card-404 {
+          grid-template-columns: 1fr;
+          padding: 0;
+        }
+        .panel-right {
+          order: -1;
+          padding: 18px;
+        }
+        h1 {
+          font-size: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card-404 scan-lines" role="main" aria-labelledby="title404">
+      <div class="panel-left">
+        <span class="kicker">ERROR • 404</span>
+        <h1 id="title404">Sahifa topilmadi.</h1>
+        <p class="lead">
+          Siz izlagan sahifa mavjud emas yoki joyi o‘zgartirilgan. Tizim
+          administratoriga murojaat qiling yoki bosh sahifaga qayting.
+        </p>
+
+        <ul class="list-inline text-muted small mb-3">
+          <li class="list-inline-item">
+            ■ Vaqt: <strong class="text-secondary" id="serverTime"></strong>
+          </li>
+        </ul>
+
+        <div class="actions">
+          <a href="/" class="btn btn-success">Bosh sahifa</a>
+        </div>
+        <div style="margin-top: 22px; color: #6b7b6f; font-size: 13px">
+          <em>qism kodi:</em> <strong>MG-NT-01</strong>
+        </div>
+      </div>
+
+      <div class="panel-right">
+        <div class="badge-stamp">XATOLIK</div>
+
+        <div class="artboard" aria-hidden="true">
+          <div class="heli">
+            <svg
+              viewBox="0 0 64 32"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <g fill="none" stroke="#2e5d38" stroke-width="0.9">
+                <rect
+                  x="6"
+                  y="10"
+                  rx="2"
+                  ry="2"
+                  width="30"
+                  height="10"
+                  fill="rgba(46,93,56,0.08)"
+                ></rect>
+                <path d="M2 14h10" stroke="#6b7f5a" stroke-width="0.8" />
+                <path d="M36 14h20" stroke="#6b7f5a" stroke-width="0.8" />
+                <path d="M22 6 L42 6" stroke="#2e5d38" stroke-width="1.2" />
+                <circle cx="18" cy="20" r="1.6" fill="#2e5d38"></circle>
+                <path d="M40 6 L46 2" stroke="#2e5d38" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
+          <div class="ground" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("serverTime").textContent =
+        new Date().toLocaleString("uz-UZ", { hour12: false });
+      function reportIssue() {
+        alert("Hisobot yuborildi. Adminlar bilan bog'lanadi.");
+      }
+    </script>
+  </body>
+</html>
