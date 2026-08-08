@@ -132,6 +132,7 @@ def events(request):
     context = {
         'events_nd':events_nd,
         'events_d':events_d,
+        'user':request.user,
         'form':form,
         'form1':form1,
     }
@@ -160,6 +161,7 @@ def eventsAll(request):
     context = {
         'events_nd': events_nd,
         'events_d': events_d,
+        'user': request.user
     }
 
     return render(request, 'event-all.html', context)
